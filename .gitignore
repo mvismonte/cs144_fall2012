@@ -1,0 +1,6 @@
+# Copyright 2012 Mark Vismonte and Logan Chang. All rights reserved.
+# Date: 10/2/2012
+# .gitignore for this project
+
+!.gitignore
+*.swp
