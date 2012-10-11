@@ -11,7 +11,7 @@ public class ComputeSHA {
   public static void main(String[] args) {
     // Verify that there is an input file
     if (args.length < 1) {
-      System.out.println("You specify an input file");
+      System.out.println("You must specify an input file.");
     }
 
     // Declare variables.
@@ -27,11 +27,13 @@ public class ComputeSHA {
       fstream = new FileInputStream(file);
 
       // Create a byte array for the data and read the file in.
-      fileData = new byte[(int)file.length()];
-      fstream.read(fileData);
-      
+      fileData = new byte[1024];
+      for (int nread = fstream.read(fileData); nread > 0; nread = fstream.read(fileData)) {
+        md.update(fileData, 0, nread);
+      };
+
       // Find the SHA-1 of the file data and print out each byte.
-      for (byte b: md.digest(fileData)) {
+      for (byte b: md.digest()) {
         String hex = Integer.toHexString(0xFF & b);
         if (hex.length() == 1) {
           System.out.print('0');
