@@ -33,6 +33,7 @@ public class ComputeSHA {
       };
 
       // Find the SHA-1 of the file data and print out each byte.
+      // Advice taken from: http://goo.gl/AG74j
       for (byte b: md.digest()) {
         String hex = Integer.toHexString(0xFF & b);
         if (hex.length() == 1) {
