@@ -6,3 +6,4 @@
 *.swp
 *.class
 *.zip
+.DS_Store
