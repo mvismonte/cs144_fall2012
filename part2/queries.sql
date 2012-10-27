@@ -30,18 +30,29 @@ FROM ( SELECT ItemID, MAX(Currently)
 WHERE Item.Ends > UNIX_TIMESTAMP('2001-12-20 00:00:01');
 
 # Find the number of sellers whose rating is higher than 1000.
-SELECT COUNT(*)
-FROM User
-INNER JOIN Item
-ON User.UserID = Item.UserID
-WHERE Rating > 1000;
+SELECT COUNT(*) FROM
+  (SELECT COUNT(*)
+  FROM User
+  INNER JOIN Item
+  ON User.UserID = Item.UserID
+  GROUP BY User.UserID, User.Rating
+  HAVING User.Rating > 1000) AS TMP;
 
 # Find the number of users who are both sellers and bidders.
+<<<<<<< Updated upstream
 SELECT COUNT(*)
 FROM Bid
 INNER JOIN Item
 ON Bid.UserID = Item.UserID
 GROUP BY Bid.UserID;
+=======
+SELECT COUNT(*) FROM 
+  (SELECT COUNT(*)
+  FROM Bid
+  INNER JOIN Item
+  ON Bid.UserID = Item.UserID
+  GROUP BY Bid.UserID) AS TMP;
+>>>>>>> Stashed changes
 
 # Find the number of categories that include at least one item with a bid of 
 # more than $100.
