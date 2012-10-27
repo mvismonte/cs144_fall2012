@@ -25,10 +25,9 @@ FROM ( SELECT ItemID, Count(DISTINCT Category)
 # auction(s) are current. Pay special attention to the current auctions without
 # any bid.
 SELECT ItemID
-FROM ( SELECT ItemID, MAX(Currently)
-       FROM Item 
-       GROUP BY ItemID) AS MaxItem
-WHERE Item.Ends > UNIX_TIMESTAMP('2001-12-20 00:00:01');
+FROM Item
+WHERE Currently = (SELECT MAX(Currently) FROM Item)
+AND Ends > '2001-12-20 00:00:01';
 
 # Find the number of sellers whose rating is higher than 1000.
 SELECT COUNT(*) FROM
