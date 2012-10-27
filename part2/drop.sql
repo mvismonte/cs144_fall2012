@@ -1,5 +1,6 @@
 # Drops Tables
-DROP TABLE Items;
-DROP TABLE Bids;
-DROP TABLE Users;
-DROP TABLE Categories;
+use CS144;
+DROP TABLE Item;
+DROP TABLE Bid;
+DROP TABLE User;
+DROP TABLE ItemCategory;

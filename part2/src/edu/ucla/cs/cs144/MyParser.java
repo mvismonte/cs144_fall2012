@@ -6,7 +6,7 @@
  * Instructions:
  *
  * This program processes all files passed on the command line (to parse
- * an entire diectory, type "java MyParser myFiles/*.xml" at the shell).
+ * an entire directory, type "java MyParser myFiles/*.xml" at the shell).
  *
  * At the point noted below, an individual XML file has been parsed into a
  * DOM Document node. You should fill in code to process the node. Java's
@@ -179,13 +179,10 @@ class MyParser {
         /* At this point 'doc' contains a DOM representation of an 'Items' XML
          * file. Use doc.getDocumentElement() to get the root Element. */
         System.out.println("Successfully parsed - " + xmlFile);
-
-        System.out.println("Element 1: " + doc.getDocumentElement());
-
-
+        
         /* Fill in code here (you will probably need to write auxiliary
             methods). */
-        
+        System.out.println(doc);
         
         
         /**************************************************************/

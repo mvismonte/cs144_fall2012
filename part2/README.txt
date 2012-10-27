@@ -5,20 +5,32 @@ You need not specify attribute types at this stage.
 
 //////////////////// Items Table ////////////////////
 
-Items (ItemID #KEY, Name, Currently, Buy_Price, First_Bid, 
-Number_of_Bids, Started, Ends, Description)
+Item (
+  ItemID #PRIMARY_KEY,
+  Name, 
+  Buy_Price,
+  First_Bid,
+  Started,
+  Ends,
+  Description,
+)
     
     If you know the ItemID, you can get all the other fields.
 
 
 //////////////////// Bids Table ////////////////////
 
-Bids (ItemID, UserID, Time, Amount)
+Bids (
+  BidID #KEY,
+  ItemID,
+  UserID
+  Time,
+  Amount,
+)
 
-    Multiple Items can have bids from multiple Users.
-    Mutltiple Users can place bids on multiple Items.
-    Many-to-Many relation.
-
+  If you know the ItemID, you can get all of the bids on a certain item
+  If you know the 
+  
 
 //////////////////// Users Table ////////////////////
 
