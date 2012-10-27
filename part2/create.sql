@@ -6,7 +6,8 @@ USE CS144;
 CREATE TABLE Item (
   ItemID int NOT NULL,
   Name varchar(40), 
-  SellerID varchar(40),
+  UserID varchar(40),
+  Currently int,
   Buy_Price int,
   First_Bid int,
 	Started timestamp,
