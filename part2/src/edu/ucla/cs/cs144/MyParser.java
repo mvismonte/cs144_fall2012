@@ -197,7 +197,7 @@ class MyParser {
     //}
     
     
-    System.out.println(users);
+    // System.out.println(users);
     /**************************************************************/
     
   }
@@ -210,14 +210,32 @@ class MyParser {
   static HashSet<String[]> itemCategories;
 
   static String getTextFromElementTagName(Element e, String tag) {
-    return getElementText(getElementByTagNameNR(e, tag));
+    try {
+      return getElementText(getElementByTagNameNR(e, tag));
+    } catch (NullPointerException ex) {
+      return "";
+    }
   }
 
   static String getAttributeText(Element e, String tag) {
     return e.getAttributes().getNamedItem(tag).getNodeValue();
   }
 
+  static void addUser(String userID, String rating, String location, String country) {
+    // Only add the user if he/she isn't in the map already.
+    if (!users.containsKey(userID)) {
+      String[] sellerFields = new String[4];
+      sellerFields[0] = userID;
+      sellerFields[1] = rating;
+      sellerFields[2] = location;
+      sellerFields[3] = country;
+
+      users.put(userID, sellerFields);
+    }
+  }
+
   static void processItem(Element e) {
+    String itemID = getAttributeText(e, "ItemID");
     String started = getTextFromElementTagName(e, "Started");
     String ends = getTextFromElementTagName(e, "Ends");
     String location = getTextFromElementTagName(e, "Location");
@@ -231,11 +249,12 @@ class MyParser {
 
     // ItemID, Name, UserID, Currently, Buy_Price, First_Bid, Started, Ends,
     // Description.
-    fields[0] = getAttributeText(e, "ItemID");
+    fields[0] = itemID;
     fields[1] = getTextFromElementTagName(e, "Name");
     fields[2] = sellerUserID;
     fields[3] = getTextFromElementTagName(e, "Currently");
-    // fields[4] = ;
+    // fields[4] = ; // Buy_Price needs to be abstracted.  This is trickier
+    // because it's not guaranteed to exist.
     fields[5] = strip(getTextFromElementTagName(e, "First_Bid"));
     fields[6] = started;
     fields[7] = ends;
@@ -245,36 +264,38 @@ class MyParser {
 
     // System.out.println(getElementsByTagNameNR(getElementByTagNameNR(e, "Bids"), "Bid").length);
     for (Element bid: getElementsByTagNameNR(getElementByTagNameNR(e, "Bids"), "Bid")) {
-      processBid(fields[0], bid);
+      processBid(itemID, bid);
     }
 
-    //
-    if (!users.containsKey(sellerUserID)) {
-      String[] sellerFields = new String[4];
-      sellerFields[0] = sellerUserID;
-      sellerFields[1] = sellerRating;
-      sellerFields[2] = location;
-      sellerFields[3] = country;
-
-      users.put(sellerUserID, sellerFields);
-    }
-
+    // Try adding the user.
+    addUser(sellerUserID, sellerRating, location, country);
 
     // Push to the items HashSet here.
 
     // Push All categories to the itemCategories HashSet.
+    for (Element category: getElementsByTagNameNR(e, "Category")) {
+      String[] itemCategoryFields = new String[2];
+      itemCategoryFields[0] = itemID;
+      itemCategoryFields[1] = getElementText(category);
+      itemCategories.add(itemCategoryFields);
+    }
   }
 
   static void processBid(String itemID, Element e) {
     Element bidder = getElementByTagNameNR(e, "Bidder");
     String userID = getAttributeText(bidder, "UserID");
     String rating = getAttributeText(bidder, "Rating");
+    String location = getTextFromElementTagName(bidder, "Location");
+    String country = getTextFromElementTagName(bidder, "Country");
     String time = getTextFromElementTagName(e, "Time");
     String amount = strip(getTextFromElementTagName(e, "Amount"));
     System.out.println(userID + " " + rating + " " + amount);
 
+    // Try adding the user to the map.
+    addUser(userID, rating, location, country);
 
     // Push to the items HashSet here.
+    // String[] fields = new String
   }
   
   public static void main (String[] args) {
