@@ -7,9 +7,9 @@ CREATE TABLE Item (
   ItemID int NOT NULL,
   Name varchar(40), 
   UserID varchar(40),
-  Currently int,
-  Buy_Price int,
-  First_Bid int,
+  Currently decimal(8,2),
+  Buy_Price decimal(8,2),
+  First_Bid decimal(8,2),
 	Started timestamp,
   Ends timestamp,
   Description varchar(4000),
@@ -24,7 +24,7 @@ CREATE TABLE Bid (
   ItemID int,
   UserID varchar(40),
   Time timestamp,
-  Amount int,
+  Amount decimal(8,2),
   PRIMARY KEY (BidID)
   #FOREIGN KEY (ItemID, UserID)
 );

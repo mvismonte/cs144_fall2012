@@ -269,33 +269,33 @@ class MyParser {
     String second = time.substring(16, 18);
 
     if (month.equals("Jan")) {
-      month_int = 0;
-    }  else if (month.equals("Feb")) {
       month_int = 1;
-    }  else if (month.equals("Mar")) {
+    }  else if (month.equals("Feb")) {
       month_int = 2;
-    }  else if (month.equals("Apr")) {
+    }  else if (month.equals("Mar")) {
       month_int = 3;
-    }  else if (month.equals("May")) {
+    }  else if (month.equals("Apr")) {
       month_int = 4;
-    }  else if (month.equals("Jun")) {
+    }  else if (month.equals("May")) {
       month_int = 5;
-    }  else if (month.equals("Jul")) {
+    }  else if (month.equals("Jun")) {
       month_int = 6;
-    }  else if (month.equals("Aug")) {
+    }  else if (month.equals("Jul")) {
       month_int = 7;
-    }  else if (month.equals("Sep")) {
+    }  else if (month.equals("Aug")) {
       month_int = 8;
-    }  else if (month.equals("Oct")) {
+    }  else if (month.equals("Sep")) {
       month_int = 9;
-    }  else if (month.equals("Nov")) {
+    }  else if (month.equals("Oct")) {
       month_int = 10;
-    }  else if (month.equals("Dec")) {
+    }  else if (month.equals("Nov")) {
       month_int = 11;
+    }  else if (month.equals("Dec")) {
+      month_int = 12;
     } else {
       month_int = -1;
     }
-
+/*
     Calendar c = Calendar.getInstance();
     c.set(Calendar.YEAR, 2000 + Integer.parseInt(year));
     c.set(Calendar.MONTH, month_int);
@@ -305,9 +305,19 @@ class MyParser {
     c.set(Calendar.SECOND, Integer.parseInt(second));
     c.set(Calendar.MILLISECOND, 0);
 
+    System.out.println(time);
+    System.out.println(year + "-" + month_int + "-" + day + " " + hour + ":" + minute + ":" + second);
+
     unix_time_int = (int)(c.getTimeInMillis() / 1000L);
 
     unix_time = Integer.toString(unix_time_int);
+
+    System.out.println(unix_time_int);
+
+    */
+
+    unix_time = "20" + year + "-" + month_int + "-" + day + " " + hour + ":" + minute + ":" + second;
+    //System.out.println(unix_time);
 
     return unix_time;
   }
@@ -331,8 +341,8 @@ class MyParser {
     fields[0] = itemID;
     fields[1] = getTextFromElementTagName(e, "Name");
     fields[2] = sellerUserID;
-    fields[3] = getTextFromElementTagName(e, "Currently");
-    fields[4] = getTextFromElementTagName(e, "Buy_Price");
+    fields[3] = strip(getTextFromElementTagName(e, "Currently"));
+    fields[4] = strip(getTextFromElementTagName(e, "Buy_Price"));
     fields[5] = strip(getTextFromElementTagName(e, "First_Bid"));
     fields[6] = parseTime(started);
     fields[7] = parseTime(ends);

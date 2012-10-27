@@ -24,10 +24,9 @@ FROM ( SELECT ItemID, Count(DISTINCT Category)
 # auction(s) are current. Pay special attention to the current auctions without
 # any bid.
 SELECT ItemID
-FROM ( SELECT ItemID, MAX(Currently)
-       FROM Item 
-       GROUP BY ItemID) AS MaxItem
-WHERE Item.Ends > UNIX_TIMESTAMP('2001-12-20 00:00:01');
+FROM Item
+WHERE Currently = (SELECT MAX(Currently) FROM Item)
+AND Ends > '2001-12-20 00:00:01';
 
 # Find the number of sellers whose rating is higher than 1000.
 SELECT COUNT(*) FROM
@@ -39,26 +38,23 @@ SELECT COUNT(*) FROM
   HAVING User.Rating > 1000) AS TMP;
 
 # Find the number of users who are both sellers and bidders.
-<<<<<<< Updated upstream
-SELECT COUNT(*)
-FROM Bid
-INNER JOIN Item
-ON Bid.UserID = Item.UserID
-GROUP BY Bid.UserID;
-=======
 SELECT COUNT(*) FROM 
   (SELECT COUNT(*)
   FROM Bid
   INNER JOIN Item
   ON Bid.UserID = Item.UserID
   GROUP BY Bid.UserID) AS TMP;
->>>>>>> Stashed changes
 
 # Find the number of categories that include at least one item with a bid of 
 # more than $100.
 SELECT COUNT(DISTINCT Category)
-FROM ItemCategory
-INNER JOIN Bid
-ON ItemCategory.UserID = Bid.UserID
+FROM Bid
+INNER JOIN ItemCategory
+ON ItemCategory.ItemID = Bid.ItemID
 GROUP BY Category
-HAVING Amount > 100;
+HAVING Bid.Amount > 100;
+
+
+
+
+
