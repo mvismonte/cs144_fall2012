@@ -24,10 +24,19 @@ FROM ( SELECT ItemID, Count(DISTINCT Category)
 # one second after midnight, so you can use this time point to decide which 
 # auction(s) are current. Pay special attention to the current auctions without
 # any bid.
-SELECT ItemID
-FROM Item
-WHERE Currently = (SELECT MAX(Currently) FROM Item)
-AND Ends > '2001-12-20 00:00:01';
+#SELECT Item.ItemID
+SELECT ItemID 
+FROM ( SELECT Item.ItemID, Currently
+                           FROM Item
+                           INNER JOIN Bid
+                           ON Item.ItemID = Bid.ItemID
+                           WHERE Ends > '2001-12-20 00:00:01') AS ItemBid
+WHERE Currently = ( SELECT MAX(Currently) 
+                    FROM ( SELECT Item.ItemID, Currently
+                           FROM Item
+                           INNER JOIN Bid
+                           ON Item.ItemID = Bid.ItemID
+                           WHERE Ends > '2001-12-20 00:00:01') AS ItemBid);
 
 # Find the number of sellers whose rating is higher than 1000.
 SELECT COUNT(*) FROM
@@ -52,5 +61,12 @@ SELECT COUNT(DISTINCT Category)
 FROM Bid
 INNER JOIN ItemCategory
 ON ItemCategory.ItemID = Bid.ItemID
-GROUP BY ItemCategory.Category;
-HAVING Bid.amount > 100;
+WHERE Amount > 100;
+
+
+
+
+
+
+
+
