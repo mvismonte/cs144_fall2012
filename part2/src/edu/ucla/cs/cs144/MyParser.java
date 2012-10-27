@@ -296,7 +296,6 @@ class MyParser {
       month_int = -1;
     }
 
-
     Calendar c = Calendar.getInstance();
     c.set(Calendar.YEAR, 2000 + Integer.parseInt(year));
     c.set(Calendar.MONTH, month_int);

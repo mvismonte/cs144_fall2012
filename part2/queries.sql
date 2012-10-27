@@ -8,20 +8,15 @@ SELECT COUNT(*)
 FROM User
 INNER JOIN Item
 ON User.UserID = Item.UserID
-WHERE BINARY Location = "New York";
-
-#SELECT User.UserID, User.Location
-#FROM User
-#INNER JOIN Item
-#ON User.UserID = Item.UserID
-#WHERE BINARY Location = "New York";
+WHERE BINARY Location = "New York"
+GROUP BY User.UserID;
 
 # Find the number of auctions belonging to exactly four categories.
 SELECT COUNT(*)
 FROM ( SELECT ItemID, Count(DISTINCT Category)
        FROM ItemCategory
-       GROUPBY ItemID
-       HAVING Count(DISTINCT Category) = 4 );
+       GROUP BY ItemID
+       HAVING Count(DISTINCT Category) = 4 ) AS ItemCat;
 
 # Find the ID(s) of current (unsold) auction(s) with the highest bid.
 # Remember that the data was captured at the point in time December 20th, 2001,
@@ -30,8 +25,9 @@ FROM ( SELECT ItemID, Count(DISTINCT Category)
 # any bid.
 SELECT ItemID
 FROM ( SELECT ItemID, MAX(Currently)
-       FROM Item )
-WHERE Ends > UNIX_TIMESTAMP('2001-12-20 00:00:01')
+       FROM Item 
+       GROUP BY ItemID) AS MaxItem
+WHERE Item.Ends > UNIX_TIMESTAMP('2001-12-20 00:00:01');
 
 # Find the number of sellers whose rating is higher than 1000.
 SELECT COUNT(*)
@@ -45,7 +41,7 @@ SELECT COUNT(*)
 FROM Bid
 INNER JOIN Item
 ON Bid.UserID = Item.UserID
-GROUPBY UserID;
+GROUP BY Bid.UserID;
 
 # Find the number of categories that include at least one item with a bid of 
 # more than $100.
@@ -53,5 +49,5 @@ SELECT COUNT(DISTINCT Category)
 FROM ItemCategory
 INNER JOIN Bid
 ON ItemCategory.UserID = Bid.UserID
-GROUPBY Category
+GROUP BY Category
 HAVING Amount > 100;
