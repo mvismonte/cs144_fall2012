@@ -4,12 +4,13 @@ SELECT COUNT(*) FROM User;
 # Find the number of sellers from "New York", (i.e., sellers whose location is 
 # exactly the string "New York"). Pay special attention to case sensitivity. 
 # You should match the sellers from "New York" but not from "new york".
-SELECT COUNT(*)
-FROM User
-INNER JOIN Item
-ON User.UserID = Item.UserID
-WHERE BINARY Location = "New York"
-GROUP BY User.UserID;
+SELECT COUNT(*) FROM
+  (SELECT COUNT(*)
+  FROM User
+  INNER JOIN Item
+  ON User.UserID = Item.UserID
+  WHERE BINARY Location = "New York"
+  GROUP BY User.UserID) AS TMP;
 
 # Find the number of auctions belonging to exactly four categories.
 SELECT COUNT(*)
@@ -39,26 +40,18 @@ SELECT COUNT(*) FROM
   HAVING User.Rating > 1000) AS TMP;
 
 # Find the number of users who are both sellers and bidders.
-<<<<<<< Updated upstream
-SELECT COUNT(*)
-FROM Bid
-INNER JOIN Item
-ON Bid.UserID = Item.UserID
-GROUP BY Bid.UserID;
-=======
 SELECT COUNT(*) FROM 
   (SELECT COUNT(*)
   FROM Bid
   INNER JOIN Item
   ON Bid.UserID = Item.UserID
   GROUP BY Bid.UserID) AS TMP;
->>>>>>> Stashed changes
 
 # Find the number of categories that include at least one item with a bid of 
 # more than $100.
 SELECT COUNT(DISTINCT Category)
-FROM ItemCategory
-INNER JOIN Bid
-ON ItemCategory.UserID = Bid.UserID
-GROUP BY Category
-HAVING Amount > 100;
+FROM Bid
+INNER JOIN ItemCategory
+ON ItemCategory.ItemID = Bid.ItemID
+GROUP BY ItemCategory.Category;
+HAVING Bid.amount > 100;
