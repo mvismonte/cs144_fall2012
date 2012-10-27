@@ -192,16 +192,38 @@ class MyParser {
     for (Element e: getElementsByTagNameNR(doc.getDocumentElement(), "Item")) {
       processItem(e);
     }
-    //for (Element e: doc.getElementsByTagName("Item")) {
-    //    System.out.println(e);
-    //}
-    
-    
-    // System.out.println(users);
+
+    try {
+      // Write items.
+      CSVWriter writer = new CSVWriter(new FileWriter("items.csv"), ',');
+      for (String[] fields: items) {
+        writer.writeNext(fields);
+      }
+      writer.close();
+      // Write bids.
+      writer = new CSVWriter(new FileWriter("bids.csv"), ',');
+      for (String[] fields: bids) {
+        writer.writeNext(fields);
+      }
+      writer.close();
+      // Write users.
+      writer = new CSVWriter(new FileWriter("users.csv"), ',');
+      for (String[] fields: users.values()) {
+        writer.writeNext(fields);
+      }
+      writer.close();
+      // Write itemCategories.
+      writer = new CSVWriter(new FileWriter("itemCategories.csv"), ',');
+      for (String[] fields: itemCategories) {
+        writer.writeNext(fields);
+      }
+      writer.close();
+    } catch (IOException ex) {
+
+    }
     /**************************************************************/
     
   }
-
 
   // Populate all of these, then iterate through them in the end and write a csv file.
   static HashSet<String[]> items;
@@ -230,6 +252,7 @@ class MyParser {
       sellerFields[2] = location;
       sellerFields[3] = country;
 
+      // Actually add.
       users.put(userID, sellerFields);
     }
   }
@@ -253,8 +276,7 @@ class MyParser {
     fields[1] = getTextFromElementTagName(e, "Name");
     fields[2] = sellerUserID;
     fields[3] = getTextFromElementTagName(e, "Currently");
-    // fields[4] = ; // Buy_Price needs to be abstracted.  This is trickier
-    // because it's not guaranteed to exist.
+    fields[4] = getTextFromElementTagName(e, "Buy_Price");
     fields[5] = strip(getTextFromElementTagName(e, "First_Bid"));
     fields[6] = started;
     fields[7] = ends;
@@ -271,6 +293,7 @@ class MyParser {
     addUser(sellerUserID, sellerRating, location, country);
 
     // Push to the items HashSet here.
+    items.add(fields);
 
     // Push All categories to the itemCategories HashSet.
     for (Element category: getElementsByTagNameNR(e, "Category")) {
@@ -295,7 +318,14 @@ class MyParser {
     addUser(userID, rating, location, country);
 
     // Push to the items HashSet here.
-    // String[] fields = new String
+    String[] fields = new String[4];
+    fields[0] = itemID;
+    fields[1] = userID;
+    fields[2] = time;
+    fields[3] = amount;
+
+    // Add to bids!
+    bids.add(fields);
   }
   
   public static void main (String[] args) {
