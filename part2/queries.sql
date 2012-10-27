@@ -25,7 +25,7 @@ FROM ( SELECT ItemID, Count(DISTINCT Category)
 SELECT ItemID
 FROM ( SELECT ItemID, MAX(Currently)
        FROM Item )
-WHERE Ends < UNIX_TIMESTAMP('2001-12-20 00:00:01')
+WHERE Ends > UNIX_TIMESTAMP('2001-12-20 00:00:01')
 
 # Find the number of sellers whose rating is higher than 1000.
 SELECT COUNT(*)
