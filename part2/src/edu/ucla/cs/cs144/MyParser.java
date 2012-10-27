@@ -254,7 +254,7 @@ class MyParser {
       users.put(userID, sellerFields);
     }
   }
-  
+
   // Takes time String from xml and returns UNIX TIMESTAMP
   static String parseTime(String time) {
 
@@ -335,8 +335,8 @@ class MyParser {
     fields[3] = getTextFromElementTagName(e, "Currently");
     fields[4] = getTextFromElementTagName(e, "Buy_Price");
     fields[5] = strip(getTextFromElementTagName(e, "First_Bid"));
-    fields[6] = started;
-    fields[7] = ends;
+    fields[6] = parseTime(started);
+    fields[7] = parseTime(ends);
     fields[8] = getTextFromElementTagName(e, "Description");
 
     //System.out.println(fields[0] + " " + fields[1] + " " + fields[5]);
@@ -378,7 +378,7 @@ class MyParser {
     String[] fields = new String[4];
     fields[0] = itemID;
     fields[1] = userID;
-    fields[2] = time;
+    fields[2] = parseTime(time);
     fields[3] = amount;
 
     // Add to bids!
