@@ -184,12 +184,6 @@ class MyParser {
     /* Fill in code here (you will probably need to write auxiliary
       methods). */
 
-    // Initialize all of these to empty.
-    items = new HashSet<String[]>();
-    bids = new HashSet<String[]>();
-    users = new HashMap<String, String[]>();
-    itemCategories = new HashSet<String[]>();
-
     // Process all of the elements.
     for (Element e: getElementsByTagNameNR(doc.getDocumentElement(), "Item")) {
       processItem(e);
@@ -345,7 +339,7 @@ class MyParser {
     fields[7] = parseTime(ends);
     fields[8] = getTextFromElementTagName(e, "Description");
 
-    System.out.println(fields[0] + " " + fields[1] + " " + fields[5]);
+    //System.out.println(fields[0] + " " + fields[1] + " " + fields[5]);
 
     // System.out.println(getElementsByTagNameNR(getElementByTagNameNR(e, "Bids"), "Bid").length);
     for (Element bid: getElementsByTagNameNR(getElementByTagNameNR(e, "Bids"), "Bid")) {
@@ -375,7 +369,7 @@ class MyParser {
     String country = getTextFromElementTagName(bidder, "Country");
     String time = getTextFromElementTagName(e, "Time");
     String amount = strip(getTextFromElementTagName(e, "Amount"));
-    System.out.println(userID + " " + rating + " " + amount);
+    //System.out.println(userID + " " + rating + " " + amount);
 
     // Try adding the user to the map.
     addUser(userID, rating, location, country);
@@ -413,6 +407,12 @@ class MyParser {
       System.out.println("parser was unable to be configured");
       System.exit(2);
     }
+    
+    // Initialize all of these to empty.
+    items = new HashSet<String[]>();
+    bids = new HashSet<String[]>();
+    users = new HashMap<String, String[]>();
+    itemCategories = new HashSet<String[]>();
     
     /* Process all files listed on command line. */
     for (int i = 0; i < args.length; i++) {

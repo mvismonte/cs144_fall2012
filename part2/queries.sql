@@ -8,14 +8,20 @@ SELECT COUNT(*)
 FROM User
 INNER JOIN Item
 ON User.UserID = Item.UserID
-WHERE Location = "New York";
+WHERE BINARY Location = "New York";
+
+#SELECT User.UserID, User.Location
+#FROM User
+#INNER JOIN Item
+#ON User.UserID = Item.UserID
+#WHERE BINARY Location = "New York";
 
 # Find the number of auctions belonging to exactly four categories.
 SELECT COUNT(*)
 FROM ( SELECT ItemID, Count(DISTINCT Category)
        FROM ItemCategory
        GROUPBY ItemID
-       HAVING Count(DISTINCT Category) = 4 )
+       HAVING Count(DISTINCT Category) = 4 );
 
 # Find the ID(s) of current (unsold) auction(s) with the highest bid.
 # Remember that the data was captured at the point in time December 20th, 2001,
