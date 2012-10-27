@@ -184,11 +184,13 @@ class MyParser {
     /* Fill in code here (you will probably need to write auxiliary
       methods). */
 
+    // Initialize all of these to empty.
     items = new HashSet<String[]>();
     bids = new HashSet<String[]>();
     users = new HashMap<String, String[]>();
     itemCategories = new HashSet<String[]>();
 
+    // Process all of the elements.
     for (Element e: getElementsByTagNameNR(doc.getDocumentElement(), "Item")) {
       processItem(e);
     }
@@ -231,6 +233,7 @@ class MyParser {
   static HashMap<String, String[]> users;
   static HashSet<String[]> itemCategories;
 
+  // Get the text of an element with a certain tag in e.
   static String getTextFromElementTagName(Element e, String tag) {
     try {
       return getElementText(getElementByTagNameNR(e, tag));
@@ -239,6 +242,7 @@ class MyParser {
     }
   }
 
+  // Get the text of an attribute with a certain tag in e.
   static String getAttributeText(Element e, String tag) {
     return e.getAttributes().getNamedItem(tag).getNodeValue();
   }
