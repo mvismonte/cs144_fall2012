@@ -33,7 +33,7 @@ CREATE TABLE User (
   UserID varchar(40) NOT NULL,
   Rating int, 
 	Location varchar(80),
-  country varchar(40),
+  Country varchar(40),
   PRIMARY KEY (UserID)
 );
 
@@ -41,6 +41,6 @@ CREATE TABLE User (
 # relationship between Items and categories.
 CREATE TABLE ItemCategory (
   ItemID int,
-  Category varchar(40),
-  FOREIGN KEY (ItemID)
+  Category varchar(40)
+  #FOREIGN KEY (ItemID)
 );

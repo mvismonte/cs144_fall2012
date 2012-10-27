@@ -20,7 +20,7 @@ Item (
 
 //////////////////// Bids Table ////////////////////
 
-Bids (
+Bid (
   BidID #KEY,
   ItemID,
   UserID
@@ -29,21 +29,30 @@ Bids (
 )
 
   If you know the ItemID, you can get all of the bids on a certain item
-  If you know the 
+  If you know the UserID, you can get all of the bids a user has entered.
   
 
 //////////////////// Users Table ////////////////////
 
-Users (UserID #KEY, Rating, Location, Country)
+User (
+  UserID #KEY,
+  Rating,
+  Location,
+  Country
+)
 
     If you know the UserID, you can get the Rating, Location, & Country.
 
 //////////////////// Categories Table ////////////////////
 
-Categories (ItemID, Category) 
+Categories (
+  ItemID,
+  Category
+) 
 
     Items can have multiple categories.
     Categories can have multiple items.
+    The category is a string which is also the key for a category.
     Many-to-Many relation.
 
 
