@@ -184,6 +184,11 @@ class MyParser {
     /* Fill in code here (you will probably need to write auxiliary
       methods). */
 
+    items = new HashSet<String[]>();
+    bids = new HashSet<String[]>();
+    users = new HashMap<String, String[]>();
+    itemCategories = new HashSet<String[]>();
+
     for (Element e: getElementsByTagNameNR(doc.getDocumentElement(), "Item")) {
       processItem(e);
     }
@@ -192,16 +197,17 @@ class MyParser {
     //}
     
     
+    System.out.println(users);
     /**************************************************************/
     
   }
 
 
   // Populate all of these, then iterate through them in the end and write a csv file.
-  HashSet<String[]> items;
-  HashSet<String[]> bids;
-  HashMap<String, String[]> users;
-  HashSet<String[]> itemCategories;
+  static HashSet<String[]> items;
+  static HashSet<String[]> bids;
+  static HashMap<String, String[]> users;
+  static HashSet<String[]> itemCategories;
 
   static String getTextFromElementTagName(Element e, String tag) {
     return getElementText(getElementByTagNameNR(e, tag));
@@ -212,28 +218,54 @@ class MyParser {
   }
 
   static void processItem(Element e) {
-    String itemID = getAttributeText(e, "ItemID");
-    String name = getTextFromElementTagName(e, "Name");
-    String currently = getTextFromElementTagName(e, "Currently");
-    String firstBid = strip(getTextFromElementTagName(e, "First_Bid"));
     String started = getTextFromElementTagName(e, "Started");
     String ends = getTextFromElementTagName(e, "Ends");
     String location = getTextFromElementTagName(e, "Location");
     String country = getTextFromElementTagName(e, "Country");
+    Element seller = getElementByTagNameNR(e, "Seller");
+    String sellerUserID = getAttributeText(seller, "UserID");
+    String sellerRating = getAttributeText(seller, "Rating");
 
-    System.out.println(itemID + " " + name + " " + firstBid);
+    // There are 8 fields according to our schema.
+    String[] fields = new String[9];
+
+    // ItemID, Name, UserID, Currently, Buy_Price, First_Bid, Started, Ends,
+    // Description.
+    fields[0] = getAttributeText(e, "ItemID");
+    fields[1] = getTextFromElementTagName(e, "Name");
+    fields[2] = sellerUserID;
+    fields[3] = getTextFromElementTagName(e, "Currently");
+    // fields[4] = ;
+    fields[5] = strip(getTextFromElementTagName(e, "First_Bid"));
+    fields[6] = started;
+    fields[7] = ends;
+    fields[8] = getTextFromElementTagName(e, "Description");
+
+    System.out.println(fields[0] + " " + fields[1] + " " + fields[5]);
 
     // System.out.println(getElementsByTagNameNR(getElementByTagNameNR(e, "Bids"), "Bid").length);
     for (Element bid: getElementsByTagNameNR(getElementByTagNameNR(e, "Bids"), "Bid")) {
-      processBid(bid);
+      processBid(fields[0], bid);
     }
+
+    //
+    if (!users.containsKey(sellerUserID)) {
+      String[] sellerFields = new String[4];
+      sellerFields[0] = sellerUserID;
+      sellerFields[1] = sellerRating;
+      sellerFields[2] = location;
+      sellerFields[3] = country;
+
+      users.put(sellerUserID, sellerFields);
+    }
+
 
     // Push to the items HashSet here.
 
     // Push All categories to the itemCategories HashSet.
   }
 
-  static void processBid(Element e) {
+  static void processBid(String itemID, Element e) {
     Element bidder = getElementByTagNameNR(e, "Bidder");
     String userID = getAttributeText(bidder, "UserID");
     String rating = getAttributeText(bidder, "Rating");
