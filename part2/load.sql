@@ -7,7 +7,7 @@ LOAD DATA LOCAL INFILE '<users.csv>' INTO TABLE User
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"';
 
 # Loads data from <insertfilename> file into the table Bids.
-LOAD DATA LOCAL INFILE 'bids.csv' INTO TABLE Bid
+LOAD DATA LOCAL INFILE 'bids.csv' INTO TABLE Bid (ItemID, UserID, Time, Amount)
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"';
 
 # Loads data from <insertfilename> file into the table Categories.
