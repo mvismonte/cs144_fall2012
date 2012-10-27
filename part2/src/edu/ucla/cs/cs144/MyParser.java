@@ -260,6 +260,65 @@ class MyParser {
       users.put(userID, sellerFields);
     }
   }
+  
+  // Takes time String from xml and returns UNIX TIMESTAMP
+  static String parseTime(String time) {
+
+    String unix_time = "";
+    int unix_time_int = 0;
+    int month_int = 0;
+    String month = time.substring(0, 3);
+    String day = time.substring(4, 6);
+    String year = time.substring(7, 9);
+    String hour = time.substring(10, 12);
+    String minute = time.substring(13, 15);
+    String second = time.substring(16, 18);
+
+    if (month.equals("Jan")) {
+      month_int = 0;
+    }  else if (month.equals("Feb")) {
+      month_int = 1;
+    }  else if (month.equals("Mar")) {
+      month_int = 2;
+    }  else if (month.equals("Apr")) {
+      month_int = 3;
+    }  else if (month.equals("May")) {
+      month_int = 4;
+    }  else if (month.equals("Jun")) {
+      month_int = 5;
+    }  else if (month.equals("Jul")) {
+      month_int = 6;
+    }  else if (month.equals("Aug")) {
+      month_int = 7;
+    }  else if (month.equals("Sep")) {
+      month_int = 8;
+    }  else if (month.equals("Oct")) {
+      month_int = 9;
+    }  else if (month.equals("Nov")) {
+      month_int = 10;
+    }  else if (month.equals("Dec")) {
+      month_int = 11;
+    } else {
+      month_int = -1;
+    }
+
+
+    Calendar c = Calendar.getInstance();
+    c.set(Calendar.YEAR, 2000 + Integer.parseInt(year));
+    c.set(Calendar.MONTH, month_int);
+    c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+    c.set(Calendar.HOUR, Integer.parseInt(hour));
+    c.set(Calendar.MINUTE, Integer.parseInt(minute));
+    c.set(Calendar.SECOND, Integer.parseInt(second));
+    c.set(Calendar.MILLISECOND, 0);
+
+    unix_time_int = (int)(c.getTimeInMillis() / 1000L);
+
+    unix_time = Integer.toString(unix_time_int);
+
+    return unix_time;
+  }
+
 
   static void processItem(Element e) {
     String itemID = getAttributeText(e, "ItemID");
