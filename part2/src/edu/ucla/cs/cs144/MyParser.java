@@ -184,39 +184,11 @@ class MyParser {
     /* Fill in code here (you will probably need to write auxiliary
       methods). */
 
-    // Process all of the elements.
+    // Process all of the items.
     for (Element e: getElementsByTagNameNR(doc.getDocumentElement(), "Item")) {
       processItem(e);
     }
 
-    try {
-      // Write items.
-      CSVWriter writer = new CSVWriter(new FileWriter("items.csv"), ',');
-      for (String[] fields: items) {
-        writer.writeNext(fields);
-      }
-      writer.close();
-      // Write bids.
-      writer = new CSVWriter(new FileWriter("bids.csv"), ',');
-      for (String[] fields: bids) {
-        writer.writeNext(fields);
-      }
-      writer.close();
-      // Write users.
-      writer = new CSVWriter(new FileWriter("users.csv"), ',');
-      for (String[] fields: users.values()) {
-        writer.writeNext(fields);
-      }
-      writer.close();
-      // Write itemCategories.
-      writer = new CSVWriter(new FileWriter("itemCategories.csv"), ',');
-      for (String[] fields: itemCategories) {
-        writer.writeNext(fields);
-      }
-      writer.close();
-    } catch (IOException ex) {
-
-    }
     /**************************************************************/
     
   }
@@ -295,29 +267,8 @@ class MyParser {
     } else {
       month_int = -1;
     }
-/*
-    Calendar c = Calendar.getInstance();
-    c.set(Calendar.YEAR, 2000 + Integer.parseInt(year));
-    c.set(Calendar.MONTH, month_int);
-    c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
-    c.set(Calendar.HOUR, Integer.parseInt(hour));
-    c.set(Calendar.MINUTE, Integer.parseInt(minute));
-    c.set(Calendar.SECOND, Integer.parseInt(second));
-    c.set(Calendar.MILLISECOND, 0);
-
-    System.out.println(time);
-    System.out.println(year + "-" + month_int + "-" + day + " " + hour + ":" + minute + ":" + second);
-
-    unix_time_int = (int)(c.getTimeInMillis() / 1000L);
-
-    unix_time = Integer.toString(unix_time_int);
-
-    System.out.println(unix_time_int);
-
-    */
 
     unix_time = "20" + year + "-" + month_int + "-" + day + " " + hour + ":" + minute + ":" + second;
-    //System.out.println(unix_time);
 
     return unix_time;
   }
@@ -348,9 +299,7 @@ class MyParser {
     fields[7] = parseTime(ends);
     fields[8] = getTextFromElementTagName(e, "Description");
 
-    //System.out.println(fields[0] + " " + fields[1] + " " + fields[5]);
-
-    // System.out.println(getElementsByTagNameNR(getElementByTagNameNR(e, "Bids"), "Bid").length);
+    // Process each bid for the item.
     for (Element bid: getElementsByTagNameNR(getElementByTagNameNR(e, "Bids"), "Bid")) {
       processBid(itemID, bid);
     }
@@ -378,7 +327,6 @@ class MyParser {
     String country = getTextFromElementTagName(bidder, "Country");
     String time = getTextFromElementTagName(e, "Time");
     String amount = strip(getTextFromElementTagName(e, "Amount"));
-    //System.out.println(userID + " " + rating + " " + amount);
 
     // Try adding the user to the map.
     addUser(userID, rating, location, country);
@@ -427,6 +375,35 @@ class MyParser {
     for (int i = 0; i < args.length; i++) {
       File currentFile = new File(args[i]);
       processFile(currentFile);
+    }
+
+    try {
+      // Write items.
+      CSVWriter writer = new CSVWriter(new FileWriter("items.csv"), ',');
+      for (String[] fields: items) {
+        writer.writeNext(fields);
+      }
+      writer.close();
+      // Write bids.
+      writer = new CSVWriter(new FileWriter("bids.csv"), ',');
+      for (String[] fields: bids) {
+        writer.writeNext(fields);
+      }
+      writer.close();
+      // Write users.
+      writer = new CSVWriter(new FileWriter("users.csv"), ',');
+      for (String[] fields: users.values()) {
+        writer.writeNext(fields);
+      }
+      writer.close();
+      // Write itemCategories.
+      writer = new CSVWriter(new FileWriter("itemCategories.csv"), ',');
+      for (String[] fields: itemCategories) {
+        writer.writeNext(fields);
+      }
+      writer.close();
+    } catch (IOException ex) {
+
     }
   }
 }

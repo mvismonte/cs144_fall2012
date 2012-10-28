@@ -1,3 +1,12 @@
+CS144
+UCLA Fall 2012
+Project 2
+
+Mark Vismonte
+503765196
+Logan Chang
+803798529
+
 Part B:
 
 1.) List your relations. Please specify all keys that hold on each relation. 

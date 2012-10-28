@@ -36,7 +36,8 @@ WHERE Currently = ( SELECT MAX(Currently)
                            FROM Item
                            INNER JOIN Bid
                            ON Item.ItemID = Bid.ItemID
-                           WHERE Ends > '2001-12-20 00:00:01') AS ItemBid);
+                           WHERE Ends > '2001-12-20 00:00:01') AS ItemBid)
+LIMIT 1;
 
 # Find the number of sellers whose rating is higher than 1000.
 SELECT COUNT(*) FROM
