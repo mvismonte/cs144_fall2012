@@ -1,5 +1,6 @@
 package edu.ucla.cs.cs144;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,6 +27,13 @@ public class Indexer {
     try {
       conn = DbManager.getConnection(true);
 
+      // Create an index writer.
+      IndexWriter indexWriter = new IndexWriter(
+        "index-directory",
+        new StandardAnalyzer(),
+        true
+      );
+
 
       /*
        * Add your code here to retrieve Items using the connection
@@ -50,10 +58,14 @@ public class Indexer {
       int itemID;
       String name, description;
 
+      // TODO: Index each item.  Need to add item and name field.
+      // Need to look over name, category and name fields.
       int i = 0;
       while (rs.next()) {
         itemID = rs.getInt("itemID");
         name = rs.getString("Name");
+
+        // Fetch the category names also!
 
         System.out.println(itemID + " " + name);
         if (i++ > 10) {
@@ -62,9 +74,12 @@ public class Indexer {
       }
 
 
-        // close the database connection
+        indexWriter.close();
+        // Close the database connection.
         conn.close();
     } catch (SQLException ex) {
+      System.out.println(ex);
+    } catch (IOException ex) {
       System.out.println(ex);
     }
   }
