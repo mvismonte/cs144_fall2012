@@ -55,23 +55,23 @@ public class Indexer {
       Statement stmt = conn.createStatement();
       ResultSet rs = stmt.executeQuery("SELECT * FROM Item");
 
-      int itemID;
-      String name, categories, description, content;
+
 
       // TODO: Index each item.  Need to add item and name field.
       // Need to look over name, category and name fields.
       int i = 0;
       while (rs.next()) {
+        int itemID;
+        String name, categories, description, content;
         itemID = rs.getInt("itemID");
         name = rs.getString("Name");
         description = rs.getString("Description");
 
         // Fetch the category names also!
-        PreparedStatement findCategories = conn.prepareStatement(
-          "SELECT Category FROM ItemCategory WHERE ItemID = ?"
+        Statement stmt2 = conn.createStatement();
+        ResultSet categoryResult = stmt2.executeQuery(
+          "SELECT Category FROM ItemCategory WHERE ItemID = " + itemID
         );
-        findCategories.setInt(1, itemID);
-        ResultSet categoryResult = findCategories.executeQuery();
         categories = "";
         while (categoryResult.next()) {
           categories += categoryResult.getString("Category") + " ";
