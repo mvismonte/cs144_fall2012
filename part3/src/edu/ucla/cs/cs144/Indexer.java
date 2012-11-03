@@ -29,7 +29,7 @@ public class Indexer {
 
       // Create an index writer.
       IndexWriter indexWriter = new IndexWriter(
-        "index-directory",
+        System.getenv("LUCENE_INDEX") + "/index-directory",
         new StandardAnalyzer(),
         true
       );
@@ -56,7 +56,7 @@ public class Indexer {
       ResultSet rs = stmt.executeQuery("SELECT * FROM Item");
 
       int itemID;
-      String name, description;
+      String name, categories, description, content;
 
       // TODO: Index each item.  Need to add item and name field.
       // Need to look over name, category and name fields.
@@ -64,13 +64,33 @@ public class Indexer {
       while (rs.next()) {
         itemID = rs.getInt("itemID");
         name = rs.getString("Name");
+        description = rs.getString("Description");
 
         // Fetch the category names also!
-
-        System.out.println(itemID + " " + name);
-        if (i++ > 10) {
-          break;
+        PreparedStatement findCategories = conn.prepareStatement(
+          "SELECT Category FROM ItemCategory WHERE ItemID = ?"
+        );
+        findCategories.setInt(1, itemID);
+        ResultSet categoryResult = findCategories.executeQuery();
+        categories = "";
+        while (categoryResult.next()) {
+          categories += categoryResult.getString("Category") + " ";
         }
+
+        //System.out.println(itemID + " " + name + ": " + categories /*+ "\n" + description*/);
+        content = name + " " + categories + " description";
+
+        Document doc = new Document();
+        doc.add(new Field("itemID", Integer.toString(itemID), Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("Name", name, Field.Store.YES, Field.Index.TOKENIZED));
+        doc.add(new Field("Categories", categories, Field.Store.YES, Field.Index.TOKENIZED));
+        doc.add(new Field("Description", description, Field.Store.YES, Field.Index.TOKENIZED));
+        doc.add(new Field("content", content, Field.Store.NO, Field.Index.TOKENIZED));
+        indexWriter.addDocument(doc);
+
+        /*if (i++ > 10) {
+          break;
+        }*/
       }
 
 
