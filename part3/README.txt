@@ -11,3 +11,6 @@ name of all the items matching the item name, category, seller, buy price,
 bidder, ending time, and description. The name, category, and description were
 handled by the Lucene indexes, so it was not necessary to create MySQL indexes
 for them.
+
+We used the StandardAnalyze to process the text fields handled by Lucene.  We
+found all the categories for each item when we processed it.
