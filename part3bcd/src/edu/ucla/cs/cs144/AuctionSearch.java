@@ -67,7 +67,7 @@ public class AuctionSearch implements IAuctionSearch {
       System.out.println("Hits: " + hits.length());
       for (int i = 0; i < hits.length(); i++) {
         Document doc = hits.doc(i);
-        System.out.println(doc.get("ItemID") + ": " + doc.get("Name"));
+        // System.out.println(doc.get("ItemID") + ": " + doc.get("Name"));
       }
 
     } catch (CorruptIndexException e) {

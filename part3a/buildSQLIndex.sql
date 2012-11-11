@@ -6,3 +6,4 @@ CREATE INDEX BidderIndex ON Bid(UserID);
 CREATE INDEX SellerIndex ON Item(UserID);
 CREATE INDEX Buy_PIndex ON Item(Buy_Price);
 CREATE INDEX EndsIndex ON Item(Ends);
+CREATE INDEX ItemCatIndex ON ItemCategory(ItemID);
