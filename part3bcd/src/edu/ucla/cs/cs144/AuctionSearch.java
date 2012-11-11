@@ -378,17 +378,19 @@ public class AuctionSearch implements IAuctionSearch {
 
       // Element node Currently
       Element currentlyElement = doc.createElement("Currently");
-      currentlyElement.appendChild(doc.createTextNode(Double.toString(currently)));
+      currentlyElement.appendChild(doc.createTextNode("$"+Double.toString(currently)));
       itemElement.appendChild(currentlyElement);
 
       // Element node Buy_Price
-      Element buy_priceElement = doc.createElement("Buy_Price");
-      buy_priceElement.appendChild(doc.createTextNode(Double.toString(buy_price)));
-      itemElement.appendChild(buy_priceElement);
+      if (buy_price > 0) {
+        Element buy_priceElement = doc.createElement("Buy_Price");
+        buy_priceElement.appendChild(doc.createTextNode("$"+Double.toString(buy_price)));
+        itemElement.appendChild(buy_priceElement);
+      }
 
       // Element node First_Bid
       Element first_bidElement = doc.createElement("First_Bid");
-      first_bidElement.appendChild(doc.createTextNode(Double.toString(first_bid)));
+      first_bidElement.appendChild(doc.createTextNode("$"+Double.toString(first_bid)));
       itemElement.appendChild(first_bidElement);
 
       // Element node Number_of_Bids
@@ -429,7 +431,7 @@ public class AuctionSearch implements IAuctionSearch {
 
         // ELement node Amount
         Element bid_amountElement = doc.createElement("Amount");
-        bid_amountElement.appendChild(doc.createTextNode(Double.toString(obj.getAmount())));
+        bid_amountElement.appendChild(doc.createTextNode("$"+Double.toString(obj.getAmount())));
         bidElement.appendChild(bid_amountElement);
       }
 
