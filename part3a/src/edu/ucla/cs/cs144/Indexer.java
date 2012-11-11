@@ -63,7 +63,7 @@ public class Indexer {
       while (rs.next()) {
         int itemID;
         String name, categories, description, content;
-        itemID = rs.getInt("itemID");
+        itemID = rs.getInt("ItemID");
         name = rs.getString("Name");
         description = rs.getString("Description");
 
@@ -87,16 +87,12 @@ public class Indexer {
         // doc.add(new Field("Description", description, Field.Store.NO, Field.Index.NO));
         doc.add(new Field("content", content, Field.Store.NO, Field.Index.TOKENIZED));
         indexWriter.addDocument(doc);
-
-        /*if (i++ > 10) {
-          break;
-        }*/
       }
 
 
-        indexWriter.close();
-        // Close the database connection.
-        conn.close();
+      indexWriter.close();
+      // Close the database connection.
+      conn.close();
     } catch (SQLException ex) {
       System.out.println(ex);
     } catch (IOException ex) {

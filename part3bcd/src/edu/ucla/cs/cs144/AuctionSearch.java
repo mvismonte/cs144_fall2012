@@ -78,11 +78,6 @@ public class AuctionSearch implements IAuctionSearch {
   
   public SearchResult[] basicSearch(String query, int numResultsToSkip, 
       int numResultsToReturn) {
-    // TODO: Your code here!
-    SearchResult[] results = new SearchResult[numResultsToReturn];
-    for (int i = 0; i < results.length; i++) {
-      results[i] = new SearchResult("123", "hi");
-    }
 
     try {
       IndexSearcher searcher = new IndexSearcher(
@@ -90,15 +85,30 @@ public class AuctionSearch implements IAuctionSearch {
       );
 
       QueryParser qp = new QueryParser("content", new StandardAnalyzer());
+      qp.setDefaultOperator(QueryParser.Operator.OR);
       Query q = qp.parse(query);
       Hits hits = searcher.search(q);
 
       System.out.println("Hits: " + hits.length());
       for (int i = 0; i < hits.length(); i++) {
         Document doc = hits.doc(i);
-        // System.out.println(doc.get("ItemID") + ": " + doc.get("Name"));
+        //System.out.println("HERE " + doc.get("ItemID") + ": " + doc.get("Name"));
       }
 
+      int start = numResultsToSkip;
+      int size = numResultsToReturn;
+      if (numResultsToReturn == 0) {
+        start = 0;
+        size = hits.length();
+      }
+
+      SearchResult[] results = new SearchResult[size];
+      for (int i = start; i < size; i++) {
+        Document doc = hits.doc(i);
+        results[i] = new SearchResult(doc.get("ItemID"), doc.get("Name"));
+      }
+
+      return results;
     } catch (CorruptIndexException e) {
       e.printStackTrace();
     } catch (IOException e) {
@@ -107,7 +117,7 @@ public class AuctionSearch implements IAuctionSearch {
       e.printStackTrace();
     }
 
-    return results;
+    return null;
   }
 
   public SearchResult[] advancedSearch(SearchConstraint[] constraints, 
