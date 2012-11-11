@@ -42,7 +42,7 @@ import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.ErrorHandler;*/
-/*
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,10 +53,39 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
  
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;*/
+//import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
+
+import java.util.ArrayList;
 
 public class AuctionSearch implements IAuctionSearch {
+  class Bid {
+    private String userId;
+    private int rating;
+    private String location;
+    private String country;
+    private String time;
+    private double amount;
+
+    public Bid() {}
+
+    public void setUserId(String userId) { this.userId = userId; }
+    public void setRating(int rating) { this.rating = rating; }
+    public void setLocation(String location) { this.location = location; }
+    public void setCountry(String country) { this.country = country; }
+    public void setTime(String time) { this.time = time; }
+    public void setAmount(double amount) { this.amount = amount; }
+
+    public String getUserId() { return userId; }
+    public int getRating() { return rating; }
+    public String getLocation() { return location; }
+    public String getCountry() { return country; }
+    public String getTime() { return time; }
+    public double getAmount() { return amount; }
+  }
+
 
   /* 
    * You will probably have to use JDBC to access MySQL data
@@ -209,14 +238,28 @@ public class AuctionSearch implements IAuctionSearch {
   public String getXMLDataForItemId(String itemId) {
     // TODO: Your code here!
     Connection conn = null;
-    String name = "hi";
-    String userId;
-    Double currently;
-    Double buy_price;
-    Double first_bid;
-    String started;
-    String ends;
-    String description; 
+    
+    // Item table
+    String name = null;
+    String userId = null;
+    double currently = 0;
+    double buy_price = 0;
+    double first_bid = 0;
+    String started = null;
+    String ends = null;
+    String description = null;
+    
+    // Use userId to get this info
+    String location = null;
+    String country = null;
+    int rating = 0;
+    
+    // Bids
+    ArrayList<Bid> bidArray = new ArrayList<Bid>();
+    int num_of_bids = 0;
+
+    // Catagories
+    ArrayList<String> categoryArray = new ArrayList<String>();
 
     try {
       // create a connection to the database to retrieve Items from MySQL
@@ -226,27 +269,12 @@ public class AuctionSearch implements IAuctionSearch {
       sitting on a connection, and passing one or more of your
       SQL statements (which you ask it to execute) to the DBMS*/
 
-      itemId = "1043374545";
+      itemId = "1043374545"; // rig item for now
 
       Statement stmt = conn.createStatement();
       ResultSet rs = stmt.executeQuery("SELECT * FROM Item WHERE ItemID='" + itemId + "'");
-/*
-      ItemID int NOT NULL,
-  Name varchar(40), 
-  UserID varchar(40),
-  Currently decimal(8,2),
-  Buy_Price decimal(8,2),
-  First_Bid decimal(8,2),
-  Started timestamp,
-  Ends timestamp,
-  Description varchar(4000),
-*/
 
       while (rs.next()) {
-      //     bar = rs.getString("bar");
-      //     beer = rs.getString("beer");
-       //    price = rs.getFloat("price");
-      //     System.out.println(bar + " sells " + beer + " for " + price + " dollars.");
         name = rs.getString("Name");
         userId = rs.getString("UserID");
         currently = rs.getDouble("Currently");
@@ -266,20 +294,85 @@ public class AuctionSearch implements IAuctionSearch {
                             "\nDesc: " + description);
       }
 
+      // Get location, country, rating of seller
+      rs = stmt.executeQuery("SELECT * FROM User WHERE UserID='" + userId + "'");
+
+      while (rs.next()) {
+        location = rs.getString("Location");
+        country = rs.getString("Country");
+        rating = rs.getInt("Rating");
+        System.out.println("UserID: " + userId +
+                            "\nRating: " + rating + 
+                            "\nLocation: " + location +
+                            "\nCountry: " + country);
+      }
+
+      // Get Bids
+      rs = stmt.executeQuery("SELECT * FROM Bid WHERE ItemID='" + itemId + "'");
+      while (rs.next()) {
+        Bid bid = new Bid();
+        bid.setUserId(rs.getString("UserID"));
+        bid.setTime(rs.getString("Time"));
+        bid.setAmount(rs.getDouble("Amount"));
+
+        bidArray.add(bid);
+      }
+
+      Iterator iterator = bidArray.iterator();
+
+      while (iterator.hasNext()) {
+        System.out.println("UserID: " + iterator.next().getUserId() +
+                            "\nTime: " + iterator.next().getTime() + 
+                            "\nAmount: " + iterator.next().getAmount());
+      }
+
       /* Convert to XML */
-/*
+
     DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
  
-    // root elements
-    Document doc = docBuilder.newDocument();
-    Element rootElement = doc.createElement("Item");
+    // root element Items
+    org.w3c.dom.Document doc = docBuilder.newDocument();
+    Element rootElement = doc.createElement("Items");
     doc.appendChild(rootElement);
- 
-    // set attribute for root
-    Attr itemId_attr = doc.createAttribute("ItemID")
-    itemId_attr.setValue(itemId);
 
+    // Element node Item
+    Element itemElement = doc.createElement("Item");
+    itemElement.setAttribute("ItemID", itemId);
+    rootElement.appendChild(itemElement);
+
+    Element nameElement = doc.createElement("Name");
+    nameElement.appendChild(doc.createTextNode(name));
+    itemElement.appendChild(nameElement);
+
+    Element currentlyElement = doc.createElement("Currently");
+    currentlyElement.appendChild(doc.createTextNode(Double.toString(currently)));
+    itemElement.appendChild(currentlyElement);
+
+    Element buy_priceElement = doc.createElement("Buy_Price");
+    buy_priceElement.appendChild(doc.createTextNode(Double.toString(buy_price)));
+    itemElement.appendChild(buy_priceElement);
+
+    Element first_bidElement = doc.createElement("First_Bid");
+    first_bidElement.appendChild(doc.createTextNode(Double.toString(first_bid)));
+    itemElement.appendChild(first_bidElement);
+
+    Element startedElement = doc.createElement("Started");
+    startedElement.appendChild(doc.createTextNode(started));
+    itemElement.appendChild(startedElement);
+
+    Element endsElement = doc.createElement("Ends");
+    endsElement.appendChild(doc.createTextNode(ends));
+    itemElement.appendChild(endsElement);
+
+    Element descriptionElement = doc.createElement("Description");
+    descriptionElement.appendChild(doc.createTextNode(description));
+    itemElement.appendChild(descriptionElement);
+
+    // set attribute for root
+    //Attr itemId_attr = doc.createAttribute("ItemID");
+    //itemId_attr.setValue(itemId);
+/*
     // staff elements
     Element staff = doc.createElement("Staff");
     rootElement.appendChild(staff);
@@ -311,21 +404,24 @@ public class AuctionSearch implements IAuctionSearch {
     Element salary = doc.createElement("salary");
     salary.appendChild(doc.createTextNode("100000"));
     staff.appendChild(salary);
- 
+ */
+
+    String xml_result = getStringFromDoc(doc);
+
     // write the content into xml file
-    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    /*TransformerFactory transformerFactory = TransformerFactory.newInstance();
     Transformer transformer = transformerFactory.newTransformer();
     DOMSource source = new DOMSource(doc);
-    StreamResult result = new StreamResult(new File("C:\\file.xml"));
+    StreamResult result = new StreamResult(xml_result);
  
     // Output to console for testing
     // StreamResult result = new StreamResult(System.out);
  
-    transformer.transform(source, result);
+    transformer.transform(source, result);*/
  
-    System.out.println("File saved!");
+    //System.out.println("File saved!");
 
-*/
+
 
 
 
@@ -335,6 +431,9 @@ public class AuctionSearch implements IAuctionSearch {
       rs.close();
       stmt.close();
       conn.close();
+      //System.out.println(xml_result);
+      return xml_result;
+
 //    } catch (ClassNotFoundException ex) {
       //System.out.println(ex);
     } catch (SQLException ex) {
@@ -349,6 +448,10 @@ public class AuctionSearch implements IAuctionSearch {
       }
     //} catch (IOException ex) {
 //      System.out.println(ex);
+    } catch (ParserConfigurationException ex) {
+      System.out.println(ex);
+    //} catch (TransformerException ex) {
+//      System.out.println(ex);
     }
 
     return name;
@@ -358,4 +461,9 @@ public class AuctionSearch implements IAuctionSearch {
     return message;
   }
 
+  public String getStringFromDoc(org.w3c.dom.Document doc)    {
+    DOMImplementationLS domImplementation = (DOMImplementationLS) doc.getImplementation();
+    LSSerializer lsSerializer = domImplementation.createLSSerializer();
+    return lsSerializer.writeToString(doc);   
+  }
 }
