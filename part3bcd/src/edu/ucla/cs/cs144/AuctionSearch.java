@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -23,6 +25,7 @@ import java.util.Iterator;
 import java.text.SimpleDateFormat;
 
 import edu.ucla.cs.cs144.DbManager;
+import edu.ucla.cs.cs144.FieldName;
 import edu.ucla.cs.cs144.SearchConstraint;
 import edu.ucla.cs.cs144.SearchResult;
 
@@ -108,16 +111,15 @@ public class AuctionSearch implements IAuctionSearch {
    * placed at src/edu/ucla/cs/cs144.
    *
    */
-  
-  public SearchResult[] basicSearch(String query, int numResultsToSkip, 
-      int numResultsToReturn) {
 
+  private SearchResult[] luceneSearch(String query, int numResultsToSkip, 
+      int numResultsToReturn, String fieldToSearch) {
     try {
       IndexSearcher searcher = new IndexSearcher(
         System.getenv("LUCENE_INDEX") + "/index-directory"
       );
 
-      QueryParser qp = new QueryParser("content", new StandardAnalyzer());
+      QueryParser qp = new QueryParser(fieldToSearch, new StandardAnalyzer());
       qp.setDefaultOperator(QueryParser.Operator.OR);
       Query q = qp.parse(query);
       Hits hits = searcher.search(q);
@@ -153,10 +155,90 @@ public class AuctionSearch implements IAuctionSearch {
     return null;
   }
 
+  private void dbSearch(String field, String table, String value, 
+    HashSet<SearchResult> results) {
+
+    Connection conn = null;
+    try {
+      conn = DbManager.getConnection(true);
+      Statement stmt = conn.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT ItemID, Name FROM " + table + 
+        " WHERE " + field + "=" + value);
+      while (rs.next()) {
+        int id = rs.getInt("ItemID");
+        String name = rs.getString("Name");
+        results.add(new SearchResult(Integer.toString(id), name));
+      }
+    } catch (SQLException ex) {
+      System.out.println(ex);
+    }
+  }
+
+  public SearchResult[] basicSearch(String query, int numResultsToSkip, 
+      int numResultsToReturn) {
+    return luceneSearch(query, numResultsToSkip, 
+      numResultsToReturn, "content");
+  }
+
   public SearchResult[] advancedSearch(SearchConstraint[] constraints, 
       int numResultsToSkip, int numResultsToReturn) {
-    // TODO: Your code here!
-    return new SearchResult[0];
+
+    ArrayList<HashSet<SearchResult>> resultSets = 
+      new ArrayList<HashSet<SearchResult>>(constraints.length);
+
+    for (int i = 0; i < constraints.length; i++) {
+      SearchConstraint sc = constraints[i];
+      String field = sc.getFieldName();
+      String val = sc.getValue();
+      HashSet<SearchResult> results = new HashSet<SearchResult>();
+
+      // ItemName search.
+      if (field == FieldName.ItemName) {
+        for (SearchResult sr: luceneSearch(val, 0, 0, "Name")) {
+          results.add(sr);
+        }
+
+      // Category search.
+      } else if (field == FieldName.Category) {
+        for (SearchResult sr: luceneSearch(val, 0, 0, "Categories")) {
+          results.add(sr);
+        }
+
+      // SellerId search.
+      } else if (field == FieldName.SellerId) {
+        dbSearch("UserID", "Item", val, results);
+      // BuyPrice search.
+      } else if (field == FieldName.BuyPrice) {
+        dbSearch("Buy_Price", "Item", val, results);
+      // BidderId search.
+      } else if (field == FieldName.BidderId) {
+        // dbSearch("UserID", "Bid", val, results);
+      // EndTime search.
+      } else if (field == FieldName.EndTime) {
+        dbSearch("Ends", "Item", val, results);
+      // Description search.
+      } else if (field == FieldName.Description) {
+        for (SearchResult sr: luceneSearch(val, 0, 0, "Description")) {
+          results.add(sr);
+        }
+      }
+
+      resultSets.add(results);
+    }
+
+    if (constraints.length == 0) {
+      return new SearchResult[0];
+    }
+
+    HashSet<SearchResult> results = resultSets.get(0);
+    for (int i = 1; i < resultSets.size(); i++) {
+      HashSet<SearchResult> currentResults = resultSets.get(i);
+      if (currentResults != null) {
+        results.retainAll(currentResults);
+      }
+    }
+
+    return results.toArray(new SearchResult[0]);
   }
 
   public String getXMLDataForItemId(String itemId) {

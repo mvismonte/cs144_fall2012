@@ -17,7 +17,7 @@ public class AuctionSearchTest {
 		String reply = as.echo(message);
 		System.out.println("Reply: " + reply);
 		
-		String query = "superman";
+		String query = "star trek";
 		SearchResult[] basicResults = as.basicSearch(query, 0, 20);
 		System.out.println("Basic Search Query: " + query);
 		System.out.println("Received " + basicResults.length + " results");
@@ -29,7 +29,7 @@ public class AuctionSearchTest {
 		    new SearchConstraint(FieldName.BuyPrice, "5.99"); 
 		SearchConstraint[] constraints = {constraint};
 		SearchResult[] advancedResults = as.advancedSearch(constraints, 0, 20);
-		System.out.println("Advanced Seacrh");
+		System.out.println("Advanced Search");
 		System.out.println("Received " + advancedResults.length + " results");
 		for(SearchResult result : advancedResults) {
 			System.out.println(result.getItemId() + ": " + result.getName());
