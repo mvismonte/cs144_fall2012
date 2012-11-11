@@ -51,9 +51,7 @@ import javax.xml.transform.stream.StreamResult;
  
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-*/
-
+import org.w3c.dom.Element;*/
 
 public class AuctionSearch implements IAuctionSearch {
 
@@ -187,15 +185,19 @@ public class AuctionSearch implements IAuctionSearch {
       }
 
       /* Convert to XML */
-
- /*     DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+/*
+    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
  
     // root elements
     Document doc = docBuilder.newDocument();
-    Element rootElement = doc.createElement("company");
+    Element rootElement = doc.createElement("Item");
     doc.appendChild(rootElement);
  
+    // set attribute for root
+    Attr itemId_attr = doc.createAttribute("ItemID")
+    itemId_attr.setValue(itemId);
+
     // staff elements
     Element staff = doc.createElement("Staff");
     rootElement.appendChild(staff);

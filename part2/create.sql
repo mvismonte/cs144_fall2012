@@ -5,7 +5,7 @@ USE CS144;
 # auctioned item.
 CREATE TABLE Item (
   ItemID int NOT NULL,
-  Name varchar(40), 
+  Name varchar(100), 
   UserID varchar(40),
   Currently decimal(8,2),
   Buy_Price decimal(8,2),
