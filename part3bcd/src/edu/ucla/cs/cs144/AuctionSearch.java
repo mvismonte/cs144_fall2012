@@ -160,7 +160,19 @@ public class AuctionSearch implements IAuctionSearch {
         " WHERE " + field + "=\"" + value + "\"");
       while (rs.next()) {
         int id = rs.getInt("ItemID");
-        String name = rs.getString("Name");
+        String name = "";
+        if (table == "Bid") {
+          ResultSet rs2 = stmt.executeQuery(
+            "SELECT Name FROM Item WHERE ItemID = " + 
+            Integer.toString(id)
+          );
+          if (rs2.next()) {
+            name = rs2.getString("Name");
+          }
+        } else {
+          name = rs.getString("Name");
+        }
+        System.out.println("Found(" + Integer.toString(id) + "): " + name);
         results.add(new SearchResult(Integer.toString(id), name));
       }
     } catch (SQLException ex) {
