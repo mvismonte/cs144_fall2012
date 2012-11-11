@@ -16,6 +16,7 @@ import org.apache.lucene.search.Hit;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TopDocCollector;
 
 import java.util.Date;
 import java.util.Iterator;
@@ -58,9 +59,22 @@ public class AuctionSearch implements IAuctionSearch {
       IndexSearcher searcher = new IndexSearcher(
         System.getenv("LUCENE_INDEX") + "/index-directory"
       );
+
+      QueryParser qp = new QueryParser("content", new StandardAnalyzer());
+      Query q = qp.parse(query);
+      Hits hits = searcher.search(q);
+
+      System.out.println("Hits: " + hits.length());
+      for (int i = 0; i < hits.length(); i++) {
+        Document doc = hits.doc(i);
+        System.out.println(doc.get("ItemID") + ": " + doc.get("Name"));
+      }
+
     } catch (CorruptIndexException e) {
       e.printStackTrace();
     } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ParseException e) {
       e.printStackTrace();
     }
 
