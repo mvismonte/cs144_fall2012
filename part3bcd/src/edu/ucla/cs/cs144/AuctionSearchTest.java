@@ -17,7 +17,7 @@ public class AuctionSearchTest {
 		String reply = as.echo(message);
 		System.out.println("Reply: " + reply);
 		
-		String query = "star trek";
+		String query = "superman`";
 		SearchResult[] basicResults = as.basicSearch(query, 0, 20);
 		System.out.println("Basic Search Query: " + query);
 		System.out.println("Received " + basicResults.length + " results");
@@ -106,9 +106,6 @@ public class AuctionSearchTest {
 		for(SearchResult result : advancedResults) {
 			System.out.println(result.getItemId() + ": " + result.getName());
 		}
-
-
-
 
 	}
 }

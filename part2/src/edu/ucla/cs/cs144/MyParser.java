@@ -202,7 +202,7 @@ class MyParser {
   // Get the text of an element with a certain tag in e.
   static String getTextFromElementTagName(Element e, String tag) {
     try {
-      return getElementText(getElementByTagNameNR(e, tag));
+      return getElementText(getElementByTagNameNR(e, tag)).replace("\"", "");
     } catch (NullPointerException ex) {
       return "";
     }

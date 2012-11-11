@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -172,7 +173,7 @@ public class AuctionSearch implements IAuctionSearch {
         } else {
           name = rs.getString("Name");
         }
-        System.out.println("Found(" + Integer.toString(id) + "): " + name);
+        // System.out.println("Found(" + Integer.toString(id) + "): " + name);
         results.add(new SearchResult(Integer.toString(id), name));
       }
     } catch (SQLException ex) {
@@ -252,7 +253,12 @@ public class AuctionSearch implements IAuctionSearch {
       }
     }
 
-    return results.toArray(new SearchResult[0]);
+    SearchResult[] retResults = results.toArray(new SearchResult[0]);
+    if (numResultsToReturn > retResults.length) {
+      numResultsToReturn = retResults.length;
+    }
+    return Arrays.copyOfRange(retResults, numResultsToSkip,
+      numResultsToSkip + numResultsToReturn);
   }
 
   public String getXMLDataForItemId(String itemId) {
