@@ -97,7 +97,7 @@ public class AuctionSearchTest {
 		}
 
 		SearchConstraint[] constraints7 = {
-			new SearchConstraint(FieldName.BuyPrice, "$46.49"),
+			new SearchConstraint(FieldName.BuyPrice, "46.49"),
 			new SearchConstraint(FieldName.EndTime, "Dec-18-01 21:16:38")
 		};
 		advancedResults = as.advancedSearch(constraints7, 0, 20);
