@@ -78,13 +78,13 @@ public class Indexer {
         }
 
         //System.out.println(itemID + " " + name + ": " + categories /*+ "\n" + description*/);
-        content = name + " " + categories + " description";
+        content = name + " " + categories + " " + description;
 
         Document doc = new Document();
-        doc.add(new Field("itemID", Integer.toString(itemID), Field.Store.YES, Field.Index.NO));
-        doc.add(new Field("Name", name, Field.Store.YES, Field.Index.TOKENIZED));
-        doc.add(new Field("Categories", categories, Field.Store.YES, Field.Index.TOKENIZED));
-        doc.add(new Field("Description", description, Field.Store.YES, Field.Index.TOKENIZED));
+        doc.add(new Field("ItemID", Integer.toString(itemID), Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("Name", name, Field.Store.YES, Field.Index.NO));
+        doc.add(new Field("Categories", categories, Field.Store.YES, Field.Index.NO));
+        // doc.add(new Field("Description", description, Field.Store.NO, Field.Index.NO));
         doc.add(new Field("content", content, Field.Store.NO, Field.Index.TOKENIZED));
         indexWriter.addDocument(doc);
 
