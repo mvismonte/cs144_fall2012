@@ -26,4 +26,14 @@ public class SearchResult {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+  public int hashCode() {
+  	return itemId.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+  	return this.name.equals((String) o);
+  }
 }
