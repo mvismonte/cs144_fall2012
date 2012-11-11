@@ -128,7 +128,7 @@ public class AuctionSearch implements IAuctionSearch {
       conn = DbManager.getConnection(true);
       Statement stmt = conn.createStatement();
       ResultSet rs = stmt.executeQuery("SELECT ItemID, Name FROM " + table + 
-        " WHERE " + field + "=" + value);
+        " WHERE " + field + "=\"" + value + "\"");
       while (rs.next()) {
         int id = rs.getInt("ItemID");
         String name = rs.getString("Name");

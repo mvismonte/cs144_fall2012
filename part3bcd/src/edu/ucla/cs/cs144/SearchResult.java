@@ -34,6 +34,6 @@ public class SearchResult {
 
   @Override
   public boolean equals(Object o) {
-  	return this.name.equals((String) o);
+  	return this.name.equals(((SearchResult) o).getName());
   }
 }
