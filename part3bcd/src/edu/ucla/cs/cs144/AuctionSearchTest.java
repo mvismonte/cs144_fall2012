@@ -85,5 +85,30 @@ public class AuctionSearchTest {
 			System.out.println(result.getItemId() + ": " + result.getName());
 		}
 
+		SearchConstraint[] constraints6 = {
+			new SearchConstraint(FieldName.SellerId, "ddkingolin"),
+			new SearchConstraint(FieldName.Description, "Tucker")
+		};
+		advancedResults = as.advancedSearch(constraints6, 0, 20);
+		System.out.println("Advanced Search 6");
+		System.out.println("Received " + advancedResults.length + " results");
+		for(SearchResult result : advancedResults) {
+			System.out.println(result.getItemId() + ": " + result.getName());
+		}
+
+		SearchConstraint[] constraints7 = {
+			new SearchConstraint(FieldName.BuyPrice, "$46.49"),
+			new SearchConstraint(FieldName.EndTime, "Dec-18-01 21:16:38")
+		};
+		advancedResults = as.advancedSearch(constraints7, 0, 20);
+		System.out.println("Advanced Search 7");
+		System.out.println("Received " + advancedResults.length + " results");
+		for(SearchResult result : advancedResults) {
+			System.out.println(result.getItemId() + ": " + result.getName());
+		}
+
+
+
+
 	}
 }
