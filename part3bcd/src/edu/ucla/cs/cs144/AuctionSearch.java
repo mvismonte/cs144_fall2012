@@ -221,7 +221,14 @@ public class AuctionSearch implements IAuctionSearch {
         // dbSearch("UserID", "Bid", val, results);
       // EndTime search.
       } else if (field == FieldName.EndTime) {
-        dbSearch("Ends", "Item", val, results);
+        try {
+          // 2001-12-20 00:00:01
+          Date date = new SimpleDateFormat("MMM-dd-yy HH:mm:ss").parse(val);
+          String value = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+          dbSearch("Ends", "Item", value, results);
+        } catch (java.text.ParseException e) {
+          e.printStackTrace();
+        }
       // Description search.
       } else if (field == FieldName.Description) {
         for (SearchResult sr: luceneSearch(val, 0, 0, "Description")) {
@@ -237,6 +244,7 @@ public class AuctionSearch implements IAuctionSearch {
     }
 
     HashSet<SearchResult> results = resultSets.get(0);
+    // Find the intersection of all sets.
     for (int i = 1; i < resultSets.size(); i++) {
       HashSet<SearchResult> currentResults = resultSets.get(i);
       if (currentResults != null) {
