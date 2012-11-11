@@ -74,5 +74,16 @@ public class AuctionSearchTest {
 		//System.out.println(item);
 
 		// Add your own test here
+		SearchConstraint[] constraints5 = {
+			new SearchConstraint(FieldName.ItemName, "Poppins"),
+			new SearchConstraint(FieldName.Category, "Movie")
+		};
+		advancedResults = as.advancedSearch(constraints5, 0, 20);
+		System.out.println("Advanced Search 5");
+		System.out.println("Received " + advancedResults.length + " results");
+		for(SearchResult result : advancedResults) {
+			System.out.println(result.getItemId() + ": " + result.getName());
+		}
+
 	}
 }
