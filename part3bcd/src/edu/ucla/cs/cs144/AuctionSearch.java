@@ -53,18 +53,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
  
 import org.w3c.dom.Attr;
-<<<<<<< HEAD
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;*/
-=======
 //import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 
 import java.util.ArrayList;
-
->>>>>>> part3_logan
 
 public class AuctionSearch implements IAuctionSearch {
   class Bid {
