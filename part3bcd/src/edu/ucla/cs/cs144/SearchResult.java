@@ -28,11 +28,13 @@ public class SearchResult {
 	}
 
 	@Override
+	// Add hashCode function for use in HashSet.
   public int hashCode() {
-  	return itemId.hashCode();
+  	return this.itemId.hashCode();
   }
 
   @Override
+  // Add hashCode function for use in HashSet.
   public boolean equals(Object o) {
   	return this.name.equals(((SearchResult) o).getName());
   }

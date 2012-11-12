@@ -107,24 +107,25 @@ public class AuctionSearch implements IAuctionSearch {
    *
    */
 
+  /*
+   * A utility function for performing a lucene query on a certain field.
+   */
   private SearchResult[] luceneSearch(String query, int numResultsToSkip, 
       int numResultsToReturn, String fieldToSearch) {
     try {
+      // Create a lucene searcher.
       IndexSearcher searcher = new IndexSearcher(
         System.getenv("LUCENE_INDEX") + "/index-directory"
       );
 
+      // Perform a query by obtaining a query object and applying it to
+      // searcher to get a hits object.
       QueryParser qp = new QueryParser(fieldToSearch, new StandardAnalyzer());
       qp.setDefaultOperator(QueryParser.Operator.OR);
       Query q = qp.parse(query);
       Hits hits = searcher.search(q);
 
       System.out.println("Hits: " + hits.length());
-      for (int i = 0; i < hits.length(); i++) {
-        Document doc = hits.doc(i);
-        //System.out.println("HERE " + doc.get("ItemID") + ": " + doc.get("Name"));
-      }
-
       int start = numResultsToSkip;
       int size = numResultsToReturn;
       if (numResultsToReturn == 0) {
@@ -132,6 +133,7 @@ public class AuctionSearch implements IAuctionSearch {
         size = hits.length();
       }
 
+      // Find the array of SearchResults to return.
       SearchResult[] results = new SearchResult[size];
       for (int i = start; i < size; i++) {
         Document doc = hits.doc(i);
@@ -150,15 +152,29 @@ public class AuctionSearch implements IAuctionSearch {
     return null;
   }
 
+  /*
+   * A utility function for performing a query on MYSQL based on the
+   * field, table, and value.  The function will append items to
+   * results.
+   */
   private void dbSearch(String field, String table, String value, 
     HashSet<SearchResult> results) {
 
     Connection conn = null;
     try {
+      // Obtain a connection to MYSQL.
       conn = DbManager.getConnection(true);
       Statement stmt = conn.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT ItemID, Name FROM " + table + 
-        " WHERE " + field + "=\"" + value + "\"");
+
+      // Query the database to get the Name and 
+      ResultSet rs = null;
+      if (table == "Bid") {
+        rs = stmt.executeQuery("SELECT ItemID FROM Bid WHERE " +
+          field + "=\"" + value + "\"");   
+      } else {
+        rs = stmt.executeQuery("SELECT ItemID, Name FROM " + table + 
+          " WHERE " + field + "=\"" + value + "\"");
+      }
       while (rs.next()) {
         int id = rs.getInt("ItemID");
         String name = "";
@@ -173,7 +189,6 @@ public class AuctionSearch implements IAuctionSearch {
         } else {
           name = rs.getString("Name");
         }
-        // System.out.println("Found(" + Integer.toString(id) + "): " + name);
         results.add(new SearchResult(Integer.toString(id), name));
       }
     } catch (SQLException ex) {
@@ -219,11 +234,11 @@ public class AuctionSearch implements IAuctionSearch {
         dbSearch("Buy_Price", "Item", val, results);
       // BidderId search.
       } else if (field == FieldName.BidderId) {
-        // dbSearch("UserID", "Bid", val, results);
+        dbSearch("UserID", "Bid", val, results);
       // EndTime search.
       } else if (field == FieldName.EndTime) {
         try {
-          // 2001-12-20 00:00:01
+          // Reformat the date.
           Date date = new SimpleDateFormat("MMM-dd-yy HH:mm:ss").parse(val);
           String value = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
           dbSearch("Ends", "Item", value, results);
@@ -261,7 +276,7 @@ public class AuctionSearch implements IAuctionSearch {
       numResultsToReturn = retResults.length;
     }
     return Arrays.copyOfRange(retResults, numResultsToSkip,
-      numResultsToSkip + numResultsToReturn);
+        numResultsToSkip + numResultsToReturn);
   }
 
   public String getXMLDataForItemId(String itemId) {
