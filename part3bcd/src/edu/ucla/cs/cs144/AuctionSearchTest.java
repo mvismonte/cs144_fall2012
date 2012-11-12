@@ -107,5 +107,14 @@ public class AuctionSearchTest {
 			System.out.println(result.getItemId() + ": " + result.getName());
 		}
 
+		SearchConstraint[] constraints8 = {
+			new SearchConstraint(FieldName.BidderId, "zippershark")
+		};
+		advancedResults = as.advancedSearch(constraints8, 0, 20);
+		System.out.println("Advanced Search 8");
+		System.out.println("Received " + advancedResults.length + " results");
+		for(SearchResult result : advancedResults) {
+			System.out.println(result.getItemId() + ": " + result.getName());
+		}
 	}
 }

@@ -166,20 +166,22 @@ public class AuctionSearch implements IAuctionSearch {
       conn = DbManager.getConnection(true);
       Statement stmt = conn.createStatement();
 
-      // Query the database to get the Name and 
-      ResultSet rs = null;
+      // Query the database to get the Name and
+      String query = "";
       if (table == "Bid") {
-        rs = stmt.executeQuery("SELECT ItemID FROM Bid WHERE " +
-          field + "=\"" + value + "\"");   
+        query = "SELECT ItemID FROM Bid WHERE " +
+          field + "=\"" + value + "\"";
       } else {
-        rs = stmt.executeQuery("SELECT ItemID, Name FROM " + table + 
-          " WHERE " + field + "=\"" + value + "\"");
+        query = "SELECT ItemID, Name FROM " + table + 
+          " WHERE " + field + "=\"" + value + "\"";
       }
+      ResultSet rs = stmt.executeQuery(query);
       while (rs.next()) {
         int id = rs.getInt("ItemID");
         String name = "";
         if (table == "Bid") {
-          ResultSet rs2 = stmt.executeQuery(
+          Statement stmt2 = conn.createStatement();
+          ResultSet rs2 = stmt2.executeQuery(
             "SELECT Name FROM Item WHERE ItemID = " + 
             Integer.toString(id)
           );
@@ -191,8 +193,8 @@ public class AuctionSearch implements IAuctionSearch {
         }
         results.add(new SearchResult(Integer.toString(id), name));
       }
-    } catch (SQLException ex) {
-      System.out.println(ex);
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
   }
 
