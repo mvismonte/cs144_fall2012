@@ -254,7 +254,10 @@ public class AuctionSearch implements IAuctionSearch {
     }
 
     SearchResult[] retResults = results.toArray(new SearchResult[0]);
-    if (numResultsToReturn > retResults.length) {
+    if (numResultsToSkip > retResults.length) {
+      numResultsToSkip = retResults.length;
+    }
+    if (numResultsToReturn + numResultsToSkip > retResults.length) {
       numResultsToReturn = retResults.length;
     }
     return Arrays.copyOfRange(retResults, numResultsToSkip,
