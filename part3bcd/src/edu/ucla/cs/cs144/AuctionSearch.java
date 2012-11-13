@@ -153,7 +153,7 @@ public class AuctionSearch implements IAuctionSearch {
 
       // Query the database to get the Name and
       String query = "";
-      if (table == "Bid") {
+      if (table.equals("Bid")) {
         query = "SELECT ItemID FROM Bid WHERE " +
           field + "=\"" + value + "\"";
       } else {
@@ -164,7 +164,7 @@ public class AuctionSearch implements IAuctionSearch {
       while (rs.next()) {
         int id = rs.getInt("ItemID");
         String name = "";
-        if (table == "Bid") {
+        if (table.equals("Bid")) {
           Statement stmt2 = conn.createStatement();
           ResultSet rs2 = stmt2.executeQuery(
             "SELECT Name FROM Item WHERE ItemID = " + 
