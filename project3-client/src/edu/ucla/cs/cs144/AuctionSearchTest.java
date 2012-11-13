@@ -39,5 +39,15 @@ public class AuctionSearchTest {
 		System.out.println(item);
 
 		// Add your own test here
+		SearchConstraint[] constraints2 = {
+			new SearchConstraint(FieldName.ItemName, "pan"),
+			new SearchConstraint(FieldName.Category, "kitchenware")
+		};
+		advancedResults = AuctionSearchClient.advancedSearch(constraints2, 0, 20);
+		System.out.println("Advanced Search 2");
+		System.out.println("Received " + advancedResults.length + " results");
+		for(SearchResult result : advancedResults) {
+			System.out.println(result.getItemId() + ": " + result.getName());
+		}
 	}
 }

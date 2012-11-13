@@ -30,20 +30,6 @@ import edu.ucla.cs.cs144.FieldName;
 import edu.ucla.cs.cs144.SearchConstraint;
 import edu.ucla.cs.cs144.SearchResult;
 
-
-/*
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.ErrorHandler;*/
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -54,7 +40,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
  
 import org.w3c.dom.Attr;
-//import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
@@ -217,28 +202,28 @@ public class AuctionSearch implements IAuctionSearch {
       HashSet<SearchResult> results = new HashSet<SearchResult>();
 
       // ItemName search.
-      if (field == FieldName.ItemName) {
+      if (field.equals(FieldName.ItemName)) {
         for (SearchResult sr: luceneSearch(val, 0, 0, "Name")) {
           results.add(sr);
         }
 
       // Category search.
-      } else if (field == FieldName.Category) {
+      } else if (field.equals(FieldName.Category)) {
         for (SearchResult sr: luceneSearch(val, 0, 0, "Categories")) {
           results.add(sr);
         }
 
       // SellerId search.
-      } else if (field == FieldName.SellerId) {
+      } else if (field.equals(FieldName.SellerId)) {
         dbSearch("UserID", "Item", val, results);
       // BuyPrice search.
-      } else if (field == FieldName.BuyPrice) {
+      } else if (field.equals(FieldName.BuyPrice)) {
         dbSearch("Buy_Price", "Item", val, results);
       // BidderId search.
-      } else if (field == FieldName.BidderId) {
+      } else if (field.equals(FieldName.BidderId)) {
         dbSearch("UserID", "Bid", val, results);
       // EndTime search.
-      } else if (field == FieldName.EndTime) {
+      } else if (field.equals(FieldName.EndTime)) {
         try {
           // Reformat the date.
           Date date = new SimpleDateFormat("MMM-dd-yy HH:mm:ss").parse(val);
@@ -248,7 +233,7 @@ public class AuctionSearch implements IAuctionSearch {
           e.printStackTrace();
         }
       // Description search.
-      } else if (field == FieldName.Description) {
+      } else if (field.equals(FieldName.Description)) {
         for (SearchResult sr: luceneSearch(val, 0, 0, "Description")) {
           results.add(sr);
         }
