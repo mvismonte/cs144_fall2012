@@ -37,7 +37,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">CS144 eBay</a>
+          <a class="brand" href="/eBay">CS144 eBay</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="/">Home</a></li>
@@ -66,7 +66,7 @@
       <tbody>
         <c:forEach var="result" items="${results}">
           </tr>
-            <td>${result.itemId}"</td>
+            <td>${result.itemId}</td>
             <td><a href="/eBay/item?itemId=${result.itemId}">${result.name}</a></td>
           </tr>
         </c:forEach>
