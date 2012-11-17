@@ -1,8 +1,11 @@
+<%@tag description="Overall Page template" pageEncoding="UTF-8"%>
+<%@attribute name="title" fragment="true" %>
+<%@attribute name="extraScripts" fragment="true" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>eBay Search</title>
+    <title><jsp:invoke fragment="title"/></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -39,7 +42,7 @@
           <a class="brand" href="/eBay">CS144 eBay</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="/">Home</a></li>
+              <li class="active"><a href="/eBay">Home</a></li>
               <li><a href="/eBay/search">Search</a></li>
             </ul>
 
@@ -54,10 +57,7 @@
     </div>
 
     <div class="container">
-
-      <h1>Welcome to eBay!</h1>
-      <p>Use the search bar up top to look for items</p>
-
+      <jsp:doBody/>
     </div> <!-- /container -->
 
     <!-- Le javascript
@@ -66,6 +66,7 @@
     <script src="/eBay/js/jQuery.js"></script>
     <script src="/eBay/js/bootstrap.min.js"></script>
     <script src="/eBay/js/knockout-2.2.0.js"></script>
-
+    <script src="/eBay/js/knockout-2.2.0.js"></script>
+    <jsp:invoke fragment="extraScripts"/>
   </body>
 </html>

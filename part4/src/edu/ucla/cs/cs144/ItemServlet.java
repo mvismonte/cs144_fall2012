@@ -18,13 +18,13 @@ public class ItemServlet extends HttpServlet implements Servlet {
       // id: 1043374545
     //  AuctionSearchClient.getXMLDataForItemId("1043374545");
       String itemId = request.getParameter("itemId");
-      String pageTitle = "My Page Title";
-      //String pageBody = AuctionSearchClient.getXMLDataForItemId("1043374545");
-      //String pageBody = AuctionSearchClient.getXMLDataForItemId(itemId);
+      // String pageBody = AuctionSearchClient.getXMLDataForItemId("1043374545");
+      String pageBody = AuctionSearchClient.getXMLDataForItemId(itemId);
       //String pageBody = "THIS IS THE BODY.";
-      String pageBody = AuctionSearchClient.echo("HI");
-      request.setAttribute("title", pageTitle);
-      request.setAttribute("body", pageBody);
-      request.getRequestDispatcher("/item.jsp").forward(request, response);
+      // request.getRequestDispatcher("/item.jsp").forward(request, response);
+      PrintWriter out = response.getWriter();
+      out.println(pageBody);
+      out.close();
+      response.setContentType("text/xml");
     }
 }
