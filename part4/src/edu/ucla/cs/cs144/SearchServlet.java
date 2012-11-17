@@ -29,7 +29,7 @@ public class SearchServlet extends HttpServlet implements Servlet {
     } catch (java.lang.NumberFormatException e) {
       // This probably means it was null, so just default to the value 0.
     }
-    SearchResult[] results = AuctionSearchClient.basicSearch("star trek",
+    SearchResult[] results = AuctionSearchClient.basicSearch(q,
         startIndex, numItems);
     request.setAttribute("results", results);
     request.getRequestDispatcher("/search.jsp").forward(request, response);
