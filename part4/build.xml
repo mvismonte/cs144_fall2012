@@ -55,6 +55,7 @@
         <delete includeemptydirs="true">
             <fileset dir="${env.CATALINA_HOME}/work" includes="**/*"/>
         </delete>
+        <antcall target="build" />
         <copy file="${build-dir}/${war-name}.war" todir="${env.CATALINA_HOME}/webapps" preservelastmodified="true" overwrite="true" />
     </target>
 
