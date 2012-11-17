@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SearchServlet extends HttpServlet implements Servlet {
        
-    public SearchServlet() {}
+  public SearchServlet() {}
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-        // your codes here
-    }
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    System.out.println("hello world");
+    request.setAttribute("testing", "IM ILL");
+    request.getRequestDispatcher("/search.jsp").forward(request, response);
+  }
 }
