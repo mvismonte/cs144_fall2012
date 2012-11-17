@@ -1,8 +1,8 @@
 package edu.ucla.cs.cs144;
 
 public class SearchResult {
-	private String itemId;
-	private String name;
+	public String itemId;
+	public String name;
     
 	public SearchResult() {}
     

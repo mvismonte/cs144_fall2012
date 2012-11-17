@@ -57,6 +57,7 @@
         </delete>
         <antcall target="build" />
         <copy file="${build-dir}/${war-name}.war" todir="${env.CATALINA_HOME}/webapps" preservelastmodified="true" overwrite="true" />
+        <antcall target="clean" />
     </target>
 
 </project>
