@@ -1,6 +1,9 @@
 package edu.ucla.cs.cs144;
 
+import com.google.gson.Gson;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,8 +34,19 @@ public class SearchServlet extends HttpServlet implements Servlet {
     }
     SearchResult[] results = AuctionSearchClient.basicSearch(q,
         startIndex, numItems);
-    request.setAttribute("results", results);
-    request.setAttribute("hasResults", new Boolean(results.length > 0));
-    request.getRequestDispatcher("/search.jsp").forward(request, response);
+
+    String accept = request.getHeader("Accept");
+    if (accept != null && accept.contains("application/json")) {
+      Gson gson = new Gson();
+      String json = gson.toJson(Arrays.asList(results));
+      PrintWriter out = response.getWriter();
+      out.println(json);
+      out.close();
+      response.setContentType("application/json");
+    } else {
+      request.setAttribute("results", results);
+      request.setAttribute("hasResults", new Boolean(results.length > 0));
+      request.getRequestDispatcher("/search.jsp").forward(request, response);
+    }
   }
 }

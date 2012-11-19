@@ -26,4 +26,9 @@ public class SearchResult {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+  public String toString() {
+    return String.format("(name=%s, itemId=%s)", name, itemId);
+  }
 }
