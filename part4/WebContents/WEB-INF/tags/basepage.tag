@@ -43,7 +43,6 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="/eBay">Home</a></li>
-              <li><a href="/eBay/search">Search</a></li>
             </ul>
 
             <form action="/eBay/search" method="get" id="search-form" class="pull-right">
@@ -66,7 +65,7 @@
     <script src="/eBay/js/jQuery.js"></script>
     <script src="/eBay/js/bootstrap.min.js"></script>
     <script src="/eBay/js/knockout-2.2.0.js"></script>
-    <script src="/eBay/js/knockout-2.2.0.js"></script>
+    <script src="/eBay/js/purl.js"></script>
     <jsp:invoke fragment="extraScripts"/>
   </body>
 </html>

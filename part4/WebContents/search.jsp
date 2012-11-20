@@ -12,45 +12,18 @@
   </jsp:attribute>
   <jsp:body>
     <div id="search-body" class="row">
-      <c:choose>
-        <c:when test="${fn:length(results) > 0}">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>ItemID</th>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              <c:forEach var="result" items="${results}">
-                </tr>
-                  <td>${result.itemId}</td>
-                  <td><a href="#${result.itemId}" class="itemDetail">${result.name}</a></td>
-                </tr>
-              </c:forEach>
-            </tbody>
-          </table>
-        </c:when>
-        <c:otherwise>
-            No results found.
-        </c:otherwise>
-      </c:choose>
-      <div class="modal hide fade" id="modal-item-info">
-        <div class="modal-header">
-          <button class="close" data-dismiss="modal">×</button>
-          <h3 data-bind="text: modalTitleAnimal()"></h3>
-        </div>
-        <div class="modal-body">
-          <h4>Staff responsible for these animals</h4>
-          <div data-bind="foreach: staffs">
-            <span data-bind="text: full_name" class="label"></span>&nbsp;
-          </div>
-        </div>
-        <div class="modal-footer">
-          <a href="#" class="btn" data-dismiss="modal">Close</a>
-          <a href="#" class="btn btn-primary" data-bind="">Observe</a>
-        </div>
+      <div class="span4">
+        <table class="table table-striped">
+          <thead>
+            <tr><th>Item Name</th></tr>
+          </thead>
+          <tbody data-bind="foreach: results">
+            <tr><td><a data-bind="text: name, attr: { href: '#'}, click: $root.selectItem"></a></td></tr>
+          </tbody>
+        </table>
       </div>
+      <div class="span8">
+        world!
     </div>
   </jsp:body>
 </t:basepage>

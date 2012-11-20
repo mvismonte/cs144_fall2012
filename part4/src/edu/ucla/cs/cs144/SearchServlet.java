@@ -20,6 +20,10 @@ public class SearchServlet extends HttpServlet implements Servlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String q = request.getParameter("q");
+    if (q == null) {
+      response.sendRedirect(response.encodeRedirectURL("/eBay"));
+      return;
+    }
     int startIndex = 0;
     int numItems = 0;
     try {
