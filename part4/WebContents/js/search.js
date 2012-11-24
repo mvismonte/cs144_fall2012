@@ -112,19 +112,38 @@ Item = function(xmlDocument) {
 
 SearchViewModel = function() {
   this.results = ko.observableArray([]);
-  this.hasMoreResults = false;
+  this.hasMoreResults = ko.observable(false);
   this.currentItem = ko.observable(null);
-  this.RESULT_CHUNK = 50;
+  this.RESULT_CHUNK = 10;
+  this.current_index = ko.observable(0);
   this.query = "";
   var self = this;
 
-  this.addResults = function(results) {
-    this.results(results);
-    this.hasMoreResults = results.length == this.RESULT_CHUNK;
+  this.loadResults = function() {
+    var data = {
+      'q': self.query,
+      'numResultsToSkip': self.current_index() * self.RESULT_CHUNK,
+      'numResultsToReturn': self.RESULT_CHUNK
+    };
+    $.getJSON('/eBay/search', data, function(results) {
+      self.results(results);
+      self.hasMoreResults(results.length == self.RESULT_CHUNK);
+    });
   };
 
-  this.moreResults = function(results) {
-  };
+  this.nextResults = function() {
+    self.current_index(self.current_index() + 1);
+    console.log('Next results');
+    self.loadResults();
+  }
+
+  this.previousResults = function() {
+    if (self.current_index() > 0) {
+      self.current_index(self.current_index() - 1);
+    }
+    console.log('Prev results');
+    self.loadResults();
+  }
 
   this.selectItem = function(item) {
     console.log("Selected item!");
@@ -133,7 +152,7 @@ SearchViewModel = function() {
     // Don't actually do this.
     // Instead, make a call to get the XML by the item id.  Then create an item,
     // then set that item as the current item.
-    settings = {
+    var settings = {
       url: '/eBay/item',
       data: {
         'itemId': item.itemId
@@ -141,7 +160,7 @@ SearchViewModel = function() {
       success: function(xmlData) {
         // Create xml data.
         console.log(xmlData);
-        itemObj = new Item(xmlData);
+        var itemObj = new Item(xmlData);
         self.currentItem(itemObj);
       }
     };
@@ -154,8 +173,6 @@ SearchViewModel = function() {
 
 
 var searchViewModel = new SearchViewModel();
-$.getJSON(window.location.href, function(results) {
-  searchViewModel.query = $.url().param('q');
-  searchViewModel.addResults(results);
-  ko.applyBindings(searchViewModel, document.getElementById('search-body'));
-});
+searchViewModel.query = $.url().param('q');
+searchViewModel.loadResults();
+ko.applyBindings(searchViewModel, document.getElementById('search-body'));

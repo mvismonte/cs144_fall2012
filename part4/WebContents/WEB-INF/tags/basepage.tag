@@ -45,9 +45,7 @@
               <li class="active"><a href="/eBay">Home</a></li>
             </ul>
             <form action="/eBay/search" method="get" id="search-form" class="pull-right">
-              <input id="search-bar" type="text" name="q" placeholder="Search eBay…" class="input-medium search-query">
-              <input type="hidden" name="numResultsToSkip" value="0">
-              <input type="hidden" name="numResultsToReturn" value="50">
+              <input id="search-bar" type="text" name="q" placeholder="Search eBay…" class="input-medium search-query" autocomplete="off">
             </form>
           </div><!--/.nav-collapse -->
         </div>
