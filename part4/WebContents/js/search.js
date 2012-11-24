@@ -6,7 +6,7 @@
 // search.js
 
 Bid = function(xmlDocument) {
-  this.xmlDoc = $(xmlDocument);
+  var xmlDoc = $(xmlDocument);
 
   // Bidder
   this.userObj = new User(xmlDoc.find('Bidder'));
@@ -20,7 +20,7 @@ Bid = function(xmlDocument) {
 }
 
 User = function(xmlDocument) {
-  this.xmlDoc = $(xmlDocument);
+  var xmlDoc = $(xmlDocument);
 
   // UserID
   this.userId = xmlDoc.attr('UserID');
@@ -43,16 +43,13 @@ Item = function(xmlDocument) {
   // seller
   // bids <- array of bids.
   // etc.
-  xmlDoc = $(xmlDocument);
-  console.log(xmlDoc);
-  console.log(xmlDoc.find('Name'));
-  console.log(xmlDoc.find('Category'));
+  var xmlDoc = $(xmlDocument);
 
   // Name
   this.name = xmlDoc.find('Name').text();
 
   // Categories
-  categories = xmlDoc.find('Category');
+  var categories = xmlDoc.find('Category');
   this.categoryArray = new Array();
   for (var i = 0; i < categories.length; i++) {
     this.categoryArray.push($(categories[i]).text());
