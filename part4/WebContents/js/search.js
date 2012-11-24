@@ -144,8 +144,8 @@ SearchViewModel = function() {
       },
       success: function(xmlData) {
         // Create xml data.
-        console.log(xmlData);
         var itemObj = new Item(xmlData);
+        console.log(itemObj);
         self.currentItem(itemObj);
       }
     };

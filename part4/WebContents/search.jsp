@@ -37,12 +37,18 @@
         </ul>
       </div>
       <div class="span8">
-        <div data-bind="ifnot: currentItem" style="display: none;">
+        <div data-bind="visible: currentItem() == null" style="display: none;" class="alert alert-info">
           Select an item
         </div>
-        <div data-bind="if: currentItem" style="display: none;">
-          Item selected
+        <div data-bind="if: currentItem() != null">
+          <dl class="dl-horizontal">
+            <dt>Name</dt>
+            <dd data-bind="text: currentItem().name"></dd>
+            <dt>Description</dt>
+            <dd data-bind="text: currentItem().description"></dd>
+          </dl>
         </div>
+      </div>
     </div>
   </jsp:body>
 </t:basepage>
