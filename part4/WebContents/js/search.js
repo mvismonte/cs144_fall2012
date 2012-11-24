@@ -39,14 +39,14 @@ SearchViewModel = function() {
   var self = this;
 
   this.loadResults = function() {
-    data = {
+    var data = {
       'q': self.query,
       'numResultsToSkip': self.current_index() * self.RESULT_CHUNK,
       'numResultsToReturn': self.RESULT_CHUNK
     };
     $.getJSON('/eBay/search', data, function(results) {
       self.results(results);
-      self.hasMoreResults(results.length > 0);
+      self.hasMoreResults(results.length == self.RESULT_CHUNK);
     });
   };
 
@@ -71,7 +71,7 @@ SearchViewModel = function() {
     // Don't actually do this.
     // Instead, make a call to get the XML by the item id.  Then create an item,
     // then set that item as the current item.
-    settings = {
+    var settings = {
       url: '/eBay/item',
       data: {
         'itemId': item.itemId
@@ -79,7 +79,7 @@ SearchViewModel = function() {
       success: function(xmlData) {
         // Create xml data.
         console.log(xmlData);
-        itemObj = new Item(xmlData);
+        var itemObj = new Item(xmlData);
         self.currentItem(itemObj);
       }
     };
