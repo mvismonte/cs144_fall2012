@@ -117,12 +117,18 @@ SearchViewModel = function() {
   };
 
   this.nextResults = function() {
+    if (!self.hasMoreResults()) {
+      return;
+    }
     self.current_index(self.current_index() + 1);
     console.log('Next results');
     self.loadResults();
   }
 
   this.previousResults = function() {
+    if (self.current_index() == 0) {
+      return;
+    }
     if (self.current_index() > 0) {
       self.current_index(self.current_index() - 1);
     }
