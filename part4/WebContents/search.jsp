@@ -23,7 +23,12 @@
         </table>
       </div>
       <div class="span8">
-        world!
+        <div data-bind="ifnot: currentItem" style="display: none;">
+          Select an item
+        </div>
+        <div data-bind="if: currentItem" style="display: none;">
+          Item selected
+        </div>
     </div>
   </jsp:body>
 </t:basepage>
