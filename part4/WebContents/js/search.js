@@ -18,33 +18,33 @@ $('.itemDetail').click(function(ev) {
 });*/
 
 Bid = function(xmlDocument) {
-  var xmlDoc = $(xmlDocument);
+  this.xmlDoc = $(xmlDocument);
 
   // Bidder
-  var userObj = User(xmlDoc.find('Bidder'));
+  this.userObj = new User(xmlDoc.find('Bidder'));
 
   // Time
-  var time = xmlDoc.find('Time').text();
+  this.time = xmlDoc.find('Time').text();
 
   // Amount
-  var amount = xmlDoc.find('Amount').text();
+  this.amount = xmlDoc.find('Amount').text();
 
 }
 
 User = function(xmlDocument) {
-  var xmlDoc = $(xmlDocument);
+  this.xmlDoc = $(xmlDocument);
 
   // UserID
-  var userId = xmlDoc.attr('UserID');
+  this.userId = xmlDoc.attr('UserID');
 
   // Rating
-  var rating = xmlDoc.attr('Rating');
+  this.rating = xmlDoc.attr('Rating');
 
   // Location
-  var location = xmlDoc.find('Location').text();
+  this.location = xmlDoc.find('Location').text();
 
   // Country
-  var country = xmlDoc.find('Country').text();
+  this.country = xmlDoc.find('Country').text();
 }
 
 
@@ -61,53 +61,53 @@ Item = function(xmlDocument) {
   console.log(xmlDoc.find('Category'));
 
   // Name
-  var name = xmlDoc.find('Name').text();
+  this.name = xmlDoc.find('Name').text();
 
   // Categories
-  var categories = xmlDoc.find('Category');
-  var categoryArray = new Array();
+  categories = xmlDoc.find('Category');
+  this.categoryArray = new Array();
   for (var i = 0; i < categories.length; i++) {
-    categoryArray.push($(categories[i]).text());
+    this.categoryArray.push($(categories[i]).text());
   }
 
   // Currently
-  var currently = xmlDoc.find('Currently').text();
+  this.currently = xmlDoc.find('Currently').text();
 
   // Buy_Price
-  var buy_price = xmlDoc.find('Buy_Price').text();
+  this.buy_price = xmlDoc.find('Buy_Price').text();
 
   // First_Bid
-  var first_bid = xmlDoc.find('First_Bid').text();
+  this.first_bid = xmlDoc.find('First_Bid').text();
 
   // Number_of_Bids
-  var num_of_bids = xmlDoc.find('Number_of_Bids').text();
+  this.num_of_bids = xmlDoc.find('Number_of_Bids').text();
 
   // Bids
   var bids = xmlDoc.find('Bids').find('Bid');
-  var bidArray = new Array();
+  this.bidArray = new Array();
   
   for (var i = 0; i < bids.length; i++) {
     bidObj = new Bid(bids[i]);
-    bidArray.push(bidObj);
+    this.bidArray.push(bidObj);
   }
 
   // Location
-  var location = xmlDoc.find('Location').text();
+  this.location = xmlDoc.find('Location').text();
 
   // Country
-  var country = xmlDoc.find('Country').text();
+  this.country = xmlDoc.find('Country').text();
 
   // Started
-  var started = xmlDoc.find('Started').text();
+  this.started = xmlDoc.find('Started').text();
 
   // Ends
-  var ends = xmlDoc.find('Ends').text();
+  this.ends = xmlDoc.find('Ends').text();
 
   // Seller
-  var seller = new User(xmlDoc.find("Seller"));
+  this.seller = new User(xmlDoc.find("Seller"));
 
   // Description
-  var description = xmlDoc.find('Description').text();
+  this.description = xmlDoc.find('Description').text();
 }
 
 SearchViewModel = function() {
