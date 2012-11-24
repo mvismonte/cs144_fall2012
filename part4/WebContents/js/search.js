@@ -87,7 +87,7 @@ Item = function(xmlDocument) {
   var bidArray = new Array();
   
   for (var i = 0; i < bids.length; i++) {
-    bidObj = new Bid(bid[i]);
+    bidObj = new Bid(bids[i]);
     bidArray.push(bidObj);
   }
 
