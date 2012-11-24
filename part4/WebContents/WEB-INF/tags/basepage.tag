@@ -44,9 +44,8 @@
             <ul class="nav">
               <li class="active"><a href="/eBay">Home</a></li>
             </ul>
-
             <form action="/eBay/search" method="get" id="search-form" class="pull-right">
-              <input type="text" placeholder="Search eBay…" name="q" class="input-medium search-query">
+              <input id="search-bar" type="text" name="q" placeholder="Search eBay…" class="input-medium search-query">
               <input type="hidden" name="numResultsToSkip" value="0">
               <input type="hidden" name="numResultsToReturn" value="50">
             </form>
@@ -66,6 +65,8 @@
     <script src="/eBay/js/bootstrap.min.js"></script>
     <script src="/eBay/js/knockout-2.2.0.js"></script>
     <script src="/eBay/js/purl.js"></script>
+    <script src="/eBay/js/autosuggestion-lib.js"></script>
+    <script src="/eBay/js/autosuggest.js"></script>
     <jsp:invoke fragment="extraScripts"/>
   </body>
 </html>
