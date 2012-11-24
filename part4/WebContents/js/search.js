@@ -17,6 +17,37 @@ $('.itemDetail').click(function(ev) {
   });
 });*/
 
+Bid = function(xmlDocument) {
+  var xmlDoc = $(xmlDocument);
+
+  // Bidder
+  var userObj = User(xmlDoc.find('Bidder'));
+
+  // Time
+  var time = xmlDoc.find('Time').text();
+
+  // Amount
+  var amount = xmlDoc.find('Amount').text();
+
+}
+
+User = function(xmlDocument) {
+  var xmlDoc = $(xmlDocument);
+
+  // UserID
+  var userId = xmlDoc.attr('UserID');
+
+  // Rating
+  var rating = xmlDoc.attr('Rating');
+
+  // Location
+  var location = xmlDoc.find('Location').text();
+
+  // Country
+  var country = xmlDoc.find('Country').text();
+}
+
+
 Item = function(xmlDocument) {
   // Set fields.
   // name
@@ -27,6 +58,56 @@ Item = function(xmlDocument) {
   xmlDoc = $(xmlDocument);
   console.log(xmlDoc);
   console.log(xmlDoc.find('Name'));
+  console.log(xmlDoc.find('Category'));
+
+  // Name
+  var name = xmlDoc.find('Name').text();
+
+  // Categories
+  var categories = xmlDoc.find('Category');
+  var categoryArray = new Array();
+  for (var i = 0; i < categories.length; i++) {
+    categoryArray.push($(categories[i]).text());
+  }
+
+  // Currently
+  var currently = xmlDoc.find('Currently').text();
+
+  // Buy_Price
+  var buy_price = xmlDoc.find('Buy_Price').text();
+
+  // First_Bid
+  var first_bid = xmlDoc.find('First_Bid').text();
+
+  // Number_of_Bids
+  var num_of_bids = xmlDoc.find('Number_of_Bids').text();
+
+  // Bids
+  var bids = xmlDoc.find('Bids').find('Bid');
+  var bidArray = new Array();
+  
+  for (var i = 0; i < bids.length; i++) {
+    bidObj = new Bid(bid[i]);
+    bidArray.push(bidObj);
+  }
+
+  // Location
+  var location = xmlDoc.find('Location').text();
+
+  // Country
+  var country = xmlDoc.find('Country').text();
+
+  // Started
+  var started = xmlDoc.find('Started').text();
+
+  // Ends
+  var ends = xmlDoc.find('Ends').text();
+
+  // Seller
+  var seller = new User(xmlDoc.find("Seller"));
+
+  // Description
+  var description = xmlDoc.find('Description').text();
 }
 
 SearchViewModel = function() {
