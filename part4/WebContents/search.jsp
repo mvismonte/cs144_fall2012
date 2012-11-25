@@ -8,6 +8,8 @@
     CS144 eBay search
   </jsp:attribute>
   <jsp:attribute name="extraScripts">
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false">
+    </script>
     <script src="/eBay/js/search.js"></script>
   </jsp:attribute>
   <jsp:body>
@@ -46,6 +48,47 @@
             <dd data-bind="text: currentItem().name"></dd>
             <dt>Description</dt>
             <dd data-bind="text: currentItem().description"></dd>
+            <dt>Currently</dt>
+            <dd data-bind="text: currentItem().currently"></dd>
+            <dt>Buy Price</dt>
+            <dd data-bind="text: currentItem().buy_price"></dd>
+            <dt>First_Bid</dt>
+            <dd data-bind="text: currentItem().first_bid"></dd>
+            <dt>Number of Bids</dt>
+            <dd data-bind="text: currentItem().num_of_bids"></dd>
+            <dt>Location</dt>
+            <dd data-bind="text: currentItem().location"></dd>
+            <dt>Started</dt>
+            <dd data-bind="text: currentItem().started"></dd>
+            <dt>Ends</dt>
+            <dd data-bind="text: currentItem().ends"></dd>
+            <dt>Bids</dt>
+            <dd>
+              <table class="table table-striped" data-bind="if: currentItem().bidArray.length > 0">
+                <thead>
+                  <tr><th>Bidder</th><th>Rating</th><th>Time</th><th>Amount</th></tr>
+                </thead>
+                <tbody data-bind="foreach: currentItem().bidArray">
+                  <tr>
+                    <td data-bind="text: userObj.userId"></td>
+                    <td data-bind="text: userObj.rating"></td>
+                    <td data-bind="text: time"></td>
+                    <td data-bind="text: amount"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </dd>
+            <dt>Categories</dt>
+            <dd data-bind="foreach: currentItem().categoryArray">
+                <li><span data-bind="text: $data"></span></li>
+            </dd>
+            <dt>Seller</dt>
+            <dd data-bind="text: currentItem().seller.userId"></dd>
+            <dt>Rating</dt>
+            <dd data-bind="text: currentItem().seller.rating"></dd>
+
+            <dt id="map"><dt>
+              <dd data-bind="lattude:searchViewModel.Lat, longitude:searchViewModel.Lng, map:map"></dd>
           </dl>
         </div>
       </div>

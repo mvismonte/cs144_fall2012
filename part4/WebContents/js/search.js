@@ -5,35 +5,22 @@
 // Date: 11/23/2012
 // search.js
 
+var map;
+
 Bid = function(xmlDocument) {
   var xmlDoc = $(xmlDocument);
-
-  // Bidder
-  this.userObj = new User(xmlDoc.find('Bidder'));
-
-  // Time
-  this.time = xmlDoc.find('Time').text();
-
-  // Amount
-  this.amount = xmlDoc.find('Amount').text();
-
-}
+  this.userObj = new User(xmlDoc.find('Bidder')); // Bidder
+  this.time = xmlDoc.find('Time').text(); // Time
+  this.amount = xmlDoc.find('Amount').text(); // Amount
+};
 
 User = function(xmlDocument) {
   var xmlDoc = $(xmlDocument);
-
-  // UserID
-  this.userId = xmlDoc.attr('UserID');
-
-  // Rating
-  this.rating = xmlDoc.attr('Rating');
-
-  // Location
-  this.location = xmlDoc.find('Location').text();
-
-  // Country
-  this.country = xmlDoc.find('Country').text();
-}
+  this.userId = xmlDoc.attr('UserID'); // UserID 
+  this.rating = xmlDoc.attr('Rating'); // Rating
+  this.location = xmlDoc.find('Location').text(); // Location
+  this.country = xmlDoc.find('Country').text(); // Country
+};
 
 
 Item = function(xmlDocument) {
@@ -44,9 +31,7 @@ Item = function(xmlDocument) {
   // bids <- array of bids.
   // etc.
   var xmlDoc = $(xmlDocument);
-
-  // Name
-  this.name = xmlDoc.find('Name').text();
+  this.name = xmlDoc.find('Name').text(); // Name
 
   // Categories
   var categories = xmlDoc.find('Category');
@@ -55,45 +40,33 @@ Item = function(xmlDocument) {
     this.categoryArray.push($(categories[i]).text());
   }
 
-  // Currently
-  this.currently = xmlDoc.find('Currently').text();
+  this.currently = xmlDoc.find('Currently').text(); // Currently
+  var bp = xmlDoc.find('Buy_Price').text(); // Buy_Price
+  if (bp == "") {
+    this.buy_price = "None";
+  } else {
+    this.buy_price = bp;
+  }
 
-  // Buy_Price
-  this.buy_price = xmlDoc.find('Buy_Price').text();
-
-  // First_Bid
-  this.first_bid = xmlDoc.find('First_Bid').text();
-
-  // Number_of_Bids
-  this.num_of_bids = xmlDoc.find('Number_of_Bids').text();
+  this.first_bid = xmlDoc.find('First_Bid').text(); // First_Bid
+  this.num_of_bids = xmlDoc.find('Number_of_Bids').text(); // Number_of_Bids
 
   // Bids
   var bids = xmlDoc.find('Bids').find('Bid');
   this.bidArray = new Array();
-  
   for (var i = 0; i < bids.length; i++) {
     bidObj = new Bid(bids[i]);
     this.bidArray.push(bidObj);
   }
-
-  // Location
-  this.location = xmlDoc.find('Location').text();
-
-  // Country
-  this.country = xmlDoc.find('Country').text();
-
-  // Started
-  this.started = xmlDoc.find('Started').text();
-
-  // Ends
-  this.ends = xmlDoc.find('Ends').text();
-
-  // Seller
-  this.seller = new User(xmlDoc.find("Seller"));
-
-  // Description
-  this.description = xmlDoc.find('Description').text();
-}
+  var locations = xmlDoc.find('Location')
+  this.location = $(locations[locations.length-1]).text(); // Location
+  var countries = xmlDoc.find('Country')
+  this.country = $(countries[countries.length-1]).text(); // Country
+  this.started = xmlDoc.find('Started').text(); // Started
+  this.ends = xmlDoc.find('Ends').text(); // Ends
+  this.seller = new User(xmlDoc.find("Seller")); // Seller
+  this.description = xmlDoc.find('Description').text(); // Description
+};
 
 SearchViewModel = function() {
   this.results = ko.observableArray([]);
@@ -150,9 +123,14 @@ SearchViewModel = function() {
       },
       success: function(xmlData) {
         // Create xml data.
+        a = xmlData;
         var itemObj = new Item(xmlData);
         console.log(itemObj);
         self.currentItem(itemObj);
+        var addressObj = new Address(itemObj);
+
+        self.Lat = ko.observable(addressObj.lat);
+        self.Lng = ko.observable(addressObj.lng);
       }
     };
     $.ajax(settings);
@@ -162,8 +140,57 @@ SearchViewModel = function() {
   };
 }
 
+function createMap() {
+    var latlng = new google.maps.LatLng(34.0522, -118.2428)
+    var mapOptions = {
+        zoom: 8,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map($('#map')[0], mapOptions);
+}
+
+Address = function codeAddress(item) {
+  var geocoder = new google.maps.Geocoder();
+  var address = item.location;
+  geocoder.geocode( { 'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+//      map.setCenter(results[0].geometry.location);
+//      var marker = new google.maps.Marker({
+//          map: map,
+          //position: results[0].geometry.location
+      this.lat = results[0].geometry.location.lat;
+      this.lng = results[0].geometry.location.lng;
+      //});
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+ko.bindingHandlers.map = {
+  init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+    var position = new google.maps.LatLng(allBindingsAccessor().latitude(), allBindingsAccessor().longitude());
+    var marker = new google.maps.Marker({
+        map: allBindingsAccessor().map,
+        position: position,
+        title: name
+    });
+    viewModel._mapMarker = marker;
+  },
+  update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+      var latlng = new google.maps.LatLng(allBindingsAccessor().latitude(), allBindingsAccessor().longitude());
+      viewModel._mapMarker.setPosition(latlng);
+  }
+}
 
 var searchViewModel = new SearchViewModel();
 searchViewModel.query = $.url().param('q');
 searchViewModel.loadResults();
-ko.applyBindings(searchViewModel, document.getElementById('search-body'));
+
+$(document).ready(function () {
+  createMap();
+  ko.applyBindings(searchViewModel, document.getElementById('search-body'));
+});
+//createMap();
+//ko.applyBindings(searchViewModel, document.getElementById('search-body'));
