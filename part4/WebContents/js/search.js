@@ -127,10 +127,10 @@ SearchViewModel = function() {
         var itemObj = new Item(xmlData);
         console.log(itemObj);
         self.currentItem(itemObj);
-        var addressObj = new Address(itemObj);
-
-        self.Lat = ko.observable(addressObj.lat);
-        self.Lng = ko.observable(addressObj.lng);
+        createMap();
+        codeAddress(itemObj);
+//        self.Lat = addressObj.lat;
+//        self.Lng = addressObj.lng;
       }
     };
     $.ajax(settings);
@@ -143,27 +143,30 @@ SearchViewModel = function() {
 function createMap() {
     var latlng = new google.maps.LatLng(34.0522, -118.2428)
     var mapOptions = {
-        zoom: 8,
+        zoom: 6,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map($('#map')[0], mapOptions);
 }
 
-Address = function codeAddress(item) {
+function codeAddress(item) {
   var geocoder = new google.maps.Geocoder();
   var address = item.location;
   geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-//      map.setCenter(results[0].geometry.location);
-//      var marker = new google.maps.Marker({
-//          map: map,
-          //position: results[0].geometry.location
-      this.lat = results[0].geometry.location.lat;
-      this.lng = results[0].geometry.location.lng;
-      //});
+      //console.log(results[0].geometry.location);
+      map.setCenter(results[0].geometry.location);
+      map.setZoom(6);
+      var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+      });
+      //this.lat = results[0].geometry.location.lat;
+      //this.lng = results[0].geometry.location.lng;
     } else {
-      alert('Geocode was not successful for the following reason: ' + status);
+      //alert('Geocode was not successful for the following reason: ' + status);
+      map.setZoom(1);
     }
   });
 }
@@ -188,9 +191,9 @@ var searchViewModel = new SearchViewModel();
 searchViewModel.query = $.url().param('q');
 searchViewModel.loadResults();
 
-$(document).ready(function () {
-  createMap();
-  ko.applyBindings(searchViewModel, document.getElementById('search-body'));
-});
+//$(document).ready(function () {
+//  createMap();
+//  ko.applyBindings(searchViewModel, document.getElementById('search-body'));
+//});
 //createMap();
-//ko.applyBindings(searchViewModel, document.getElementById('search-body'));
+ko.applyBindings(searchViewModel, document.getElementById('search-body'));

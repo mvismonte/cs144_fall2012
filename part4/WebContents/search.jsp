@@ -14,7 +14,7 @@
   </jsp:attribute>
   <jsp:body>
     <div id="search-body" class="row">
-      <div class="span4">
+      <div class="span3">
         <div class="alert alert-error" style="display: none;" data-bind="visible: results().length == 0 && current_index() == 0">
           Could not find any results for: <span data-bind="text: query"></span>
         </div>
@@ -38,7 +38,7 @@
           </li>
         </ul>
       </div>
-      <div class="span8">
+      <div class="span9">
         <div data-bind="visible: currentItem() == null" style="display: none;" class="alert alert-info">
           Select an item
         </div>
@@ -58,11 +58,13 @@
             <dd data-bind="text: currentItem().num_of_bids"></dd>
             <dt>Location</dt>
             <dd data-bind="text: currentItem().location"></dd>
+            <dt>Country</dt>
+            <dd data-bind="text: currentItem().country"></dd>
             <dt>Started</dt>
             <dd data-bind="text: currentItem().started"></dd>
             <dt>Ends</dt>
             <dd data-bind="text: currentItem().ends"></dd>
-            <dt>Bids</dt>
+            <dt data-bind="if: currentItem().num_of_bids > 0">Bids</dt>
             <dd>
               <table class="table table-striped" data-bind="if: currentItem().bidArray.length > 0">
                 <thead>
@@ -86,10 +88,9 @@
             <dd data-bind="text: currentItem().seller.userId"></dd>
             <dt>Rating</dt>
             <dd data-bind="text: currentItem().seller.rating"></dd>
-
-            <dt id="map"><dt>
-              <dd data-bind="lattude:searchViewModel.Lat, longitude:searchViewModel.Lng, map:map"></dd>
           </dl>
+          <div id="map"><div>
+          <!-- <div data-bind="lattude:searchViewModel.Lat, longitude:searchViewModel.Lng, map:map"></div> -->
         </div>
       </div>
     </div>
