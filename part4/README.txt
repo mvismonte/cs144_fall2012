@@ -1,8 +1,8 @@
 UCLA CS 144
 Fall 2012
 Project 4
-Mark Vismonte
-Logan Chang
+Mark Vismonte 503765196
+Logan Chang 803798529
 11/26/2012
 
 Project Part 4
@@ -26,3 +26,6 @@ the search results.
 We implemented autocomplete by showing possible text, but we didn't implement
 the autocomplete drop down because we believed that it interfered with our
 design of the search box on the top of each page.
+
+We implemented the Google Map using the Google Map Geocoding API.
+
