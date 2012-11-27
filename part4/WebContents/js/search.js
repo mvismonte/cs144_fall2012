@@ -124,7 +124,6 @@ SearchViewModel = function() {
       return;
     }
     self.current_index(self.current_index() + 1);
-    console.log('Next results');
     self.loadResults();
   }
 
@@ -135,14 +134,10 @@ SearchViewModel = function() {
     if (self.current_index() > 0) {
       self.current_index(self.current_index() - 1);
     }
-    console.log('Prev results');
     self.loadResults();
   }
 
   this.selectItem = function(item) {
-    console.log("Selected item!");
-    console.log(item.itemId);
-
     // Don't actually do this.
     // Instead, make a call to get the XML by the item id.  Then create an item,
     // then set that item as the current item.
@@ -155,7 +150,6 @@ SearchViewModel = function() {
         // Create xml data.
         a = xmlData;
         var itemObj = new Item(xmlData);
-        console.log(itemObj);
         self.currentItem(itemObj);
         createMap();
         codeAddress(itemObj);
@@ -183,7 +177,6 @@ function codeAddress(item) {
   var address = item.location;
   geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-      console.log(results[0].geometry.location);
       map.setCenter(results[0].geometry.location);
       map.setZoom(6);
       var marker = new google.maps.Marker({
