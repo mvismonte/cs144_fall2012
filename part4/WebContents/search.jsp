@@ -48,22 +48,22 @@
             <dd data-bind="text: currentItem().name"></dd>
             <dt>Description</dt>
             <dd data-bind="text: currentItem().description"></dd>
-            <dt>Currently</dt>
-            <dd data-bind="text: currentItem().currently"></dd>
-            <dt>Buy Price</dt>
-            <dd data-bind="text: currentItem().buy_price"></dd>
-            <dt>First_Bid</dt>
-            <dd data-bind="text: currentItem().first_bid"></dd>
-            <dt>Number of Bids</dt>
-            <dd data-bind="text: currentItem().num_of_bids"></dd>
             <dt>Location</dt>
             <dd data-bind="text: currentItem().location"></dd>
             <dt>Country</dt>
             <dd data-bind="text: currentItem().country"></dd>
-            <dt>Started</dt>
+            <dt>Starting Time</dt>
             <dd data-bind="text: currentItem().started"></dd>
-            <dt>Ends</dt>
+            <dt>Ending Time</dt>
             <dd data-bind="text: currentItem().ends"></dd>
+            <dt>Current Price</dt>
+            <dd data-bind="text: currentItem().currently"></dd>
+            <dt>Buy Price</dt>
+            <dd data-bind="text: currentItem().buy_price"></dd>
+            <dt>Starting Price</dt>
+            <dd data-bind="text: currentItem().first_bid"></dd>
+            <dt>Number of Bids</dt>
+            <dd data-bind="text: currentItem().num_of_bids"></dd>
             <dt data-bind="if: currentItem().num_of_bids > 0">Bids</dt>
             <dd>
               <table class="table table-striped" data-bind="if: currentItem().bidArray.length > 0">
@@ -89,9 +89,8 @@
             <dt>Rating</dt>
             <dd data-bind="text: currentItem().seller.rating"></dd>
           </dl>
-          <div id="map"><div>
-          <!-- <div data-bind="lattude:searchViewModel.Lat, longitude:searchViewModel.Lng, map:map"></div> -->
         </div>
+        <div data-bind="visible: currentItem() != null" id="map"><div>
       </div>
     </div>
   </jsp:body>

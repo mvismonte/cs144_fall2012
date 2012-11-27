@@ -19,19 +19,21 @@ User = function(xmlDocument) {
   this.userId = xmlDoc.attr('UserID'); // UserID 
   this.rating = xmlDoc.attr('Rating'); // Rating
   this.location = xmlDoc.find('Location').text(); // Location
+  if (this.location == "") {
+    this.location = "None";
+  }
   this.country = xmlDoc.find('Country').text(); // Country
+  if (this.country == "") {
+    this.country = "None";
+  }
 };
 
-
 Item = function(xmlDocument) {
-  // Set fields.
-  // name
-  // description
-  // seller
-  // bids <- array of bids.
-  // etc.
   var xmlDoc = $(xmlDocument);
   this.name = xmlDoc.find('Name').text(); // Name
+  if (this.name == "") {
+    this.name = "None";
+  }
 
   // Categories
   var categories = xmlDoc.find('Category');
@@ -41,15 +43,23 @@ Item = function(xmlDocument) {
   }
 
   this.currently = xmlDoc.find('Currently').text(); // Currently
-  var bp = xmlDoc.find('Buy_Price').text(); // Buy_Price
-  if (bp == "") {
+  if (this.currently == "") {
+    this.currently = "None";
+  }
+  this.buy_price = xmlDoc.find('Buy_Price').text(); // Buy_Price
+  if (this.buy_price == "") {
     this.buy_price = "None";
-  } else {
-    this.buy_price = bp;
   }
 
   this.first_bid = xmlDoc.find('First_Bid').text(); // First_Bid
+  if (this.first_bid == "") {
+    this.first_bid = "None";
+  }  
+  
   this.num_of_bids = xmlDoc.find('Number_of_Bids').text(); // Number_of_Bids
+  if (this.num_of_bids == "") {
+    this.num_of_bids = "0";
+  }
 
   // Bids
   var bids = xmlDoc.find('Bids').find('Bid');
@@ -58,14 +68,34 @@ Item = function(xmlDocument) {
     bidObj = new Bid(bids[i]);
     this.bidArray.push(bidObj);
   }
+
   var locations = xmlDoc.find('Location')
   this.location = $(locations[locations.length-1]).text(); // Location
+  if (this.location == "") {
+    this.location = "None";
+  }
   var countries = xmlDoc.find('Country')
   this.country = $(countries[countries.length-1]).text(); // Country
+  if (this.country == "") {
+    this.country = "None";
+  }
+
   this.started = xmlDoc.find('Started').text(); // Started
+  if (this.started == "") {
+    this.started = "None";
+  }
+
   this.ends = xmlDoc.find('Ends').text(); // Ends
+  if (this.ends == "") {
+    this.ends = "None";
+  }
+
   this.seller = new User(xmlDoc.find("Seller")); // Seller
+  
   this.description = xmlDoc.find('Description').text(); // Description
+  if (this.description == "") {
+    this.description = "None";
+  }
 };
 
 SearchViewModel = function() {
@@ -129,8 +159,6 @@ SearchViewModel = function() {
         self.currentItem(itemObj);
         createMap();
         codeAddress(itemObj);
-//        self.Lat = addressObj.lat;
-//        self.Lng = addressObj.lng;
       }
     };
     $.ajax(settings);
@@ -141,7 +169,7 @@ SearchViewModel = function() {
 }
 
 function createMap() {
-    var latlng = new google.maps.LatLng(34.0522, -118.2428)
+    var latlng = new google.maps.LatLng(34.0522, -118.2428);
     var mapOptions = {
         zoom: 6,
         center: latlng,
@@ -155,45 +183,24 @@ function codeAddress(item) {
   var address = item.location;
   geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-      //console.log(results[0].geometry.location);
+      console.log(results[0].geometry.location);
       map.setCenter(results[0].geometry.location);
       map.setZoom(6);
       var marker = new google.maps.Marker({
           map: map,
           position: results[0].geometry.location
       });
-      //this.lat = results[0].geometry.location.lat;
-      //this.lng = results[0].geometry.location.lng;
     } else {
-      //alert('Geocode was not successful for the following reason: ' + status);
       map.setZoom(1);
     }
   });
-}
-
-ko.bindingHandlers.map = {
-  init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-    var position = new google.maps.LatLng(allBindingsAccessor().latitude(), allBindingsAccessor().longitude());
-    var marker = new google.maps.Marker({
-        map: allBindingsAccessor().map,
-        position: position,
-        title: name
-    });
-    viewModel._mapMarker = marker;
-  },
-  update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-      var latlng = new google.maps.LatLng(allBindingsAccessor().latitude(), allBindingsAccessor().longitude());
-      viewModel._mapMarker.setPosition(latlng);
-  }
 }
 
 var searchViewModel = new SearchViewModel();
 searchViewModel.query = $.url().param('q');
 searchViewModel.loadResults();
 
-//$(document).ready(function () {
-//  createMap();
-//  ko.applyBindings(searchViewModel, document.getElementById('search-body'));
-//});
-//createMap();
-ko.applyBindings(searchViewModel, document.getElementById('search-body'));
+$(document).ready(function () {
+  createMap();
+  ko.applyBindings(searchViewModel, document.getElementById('search-body'));
+});
