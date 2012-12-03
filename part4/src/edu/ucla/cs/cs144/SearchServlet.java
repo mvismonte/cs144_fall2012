@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.ucla.cs.cs144.AuctionSearchClient;
 import edu.ucla.cs.cs144.SearchResult;
+import edu.ucla.cs.cs144.Utilities;
 
 public class SearchServlet extends HttpServlet implements Servlet {
        
@@ -19,6 +20,9 @@ public class SearchServlet extends HttpServlet implements Servlet {
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+    //if (Utilities.toHTTPifSecure(request, response)) {
+    //  return;
+    //}
     String q = request.getParameter("q");
     if (q == null) {
       response.sendRedirect(response.encodeRedirectURL("/eBay"));

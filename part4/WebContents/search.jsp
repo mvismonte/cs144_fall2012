@@ -8,8 +8,8 @@
     CS144 eBay search
   </jsp:attribute>
   <jsp:attribute name="extraScripts">
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="/eBay/js/jquery.cookie.js"></script>
     <script src="/eBay/js/search.js"></script>
   </jsp:attribute>
   <jsp:body>
@@ -58,8 +58,13 @@
             <dd data-bind="text: currentItem().ends"></dd>
             <dt>Current Price</dt>
             <dd data-bind="text: currentItem().currently"></dd>
-            <dt>Buy Price</dt>
-            <dd data-bind="text: currentItem().buy_price"></dd>
+            <div data-bind="visible: currentItem().buy_price != 'None'">
+              <dt>Buy Price</dt>
+              <dd>
+                <span data-bind="text: currentItem().buy_price"></span>
+                <a href="/eBay/buy_now" class="btn btn-primary btn-mini">Buy Now!</a>
+              </dd>
+            </div>
             <dt>Starting Price</dt>
             <dd data-bind="text: currentItem().first_bid"></dd>
             <dt>Number of Bids</dt>

@@ -153,6 +153,13 @@ SearchViewModel = function() {
         self.currentItem(itemObj);
         createMap();
         codeAddress(itemObj);
+
+        // Set cookies.
+        if (item.buy_price != 'None') {
+          $.cookie('item_id', item.itemId);
+          $.cookie('item_name', itemObj.name);
+          $.cookie('item_buy_price', itemObj.buy_price);
+        }
       }
     };
     $.ajax(settings);

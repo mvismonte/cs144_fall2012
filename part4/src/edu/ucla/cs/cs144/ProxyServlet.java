@@ -14,12 +14,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.ucla.cs.cs144.Utilities;
+
 public class ProxyServlet extends HttpServlet implements Servlet {
        
     public ProxyServlet() {}
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+      //if (Utilities.toHTTPifSecure(request, response)) {
+      //  return;
+      //}
       String q = request.getParameter("q");
       if (q == null) {
         return;

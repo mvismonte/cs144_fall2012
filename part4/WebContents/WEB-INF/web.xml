@@ -31,4 +31,12 @@
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/index.html</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>BuyServlet</servlet-name>
+        <servlet-class>edu.ucla.cs.cs144.BuyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BuyServlet</servlet-name>
+        <url-pattern>/buy_now</url-pattern>
+    </servlet-mapping>
 </web-app>
