@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import edu.ucla.cs.cs144.Utilities;
 
 public class BuyServlet extends HttpServlet implements Servlet {
-       
+
     public BuyServlet() {}
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,6 +26,24 @@ public class BuyServlet extends HttpServlet implements Servlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-
+      Valid obj = new Valid(true);
+      Gson gson = new Gson();
+      String json = gson.toJson(obj);
+      PrintWriter out = response.getWriter();
+      out.println(json);
+      out.close();
+      response.setContentType("application/json");
     }
+
+  private class Valid {
+    private boolean valid;
+
+    public Valid(boolean valid) {
+      this.valid = valid;
+    }
+  }
 }
+/*
+{
+  'valid': true
+}*/
